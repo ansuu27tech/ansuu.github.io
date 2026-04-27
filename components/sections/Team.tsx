@@ -94,7 +94,7 @@ function PulseDot({ color }: { color: string }) {
   );
 }
 
-function Social({ href, Icon, color }: { href: string; Icon: React.ElementType; color: string }) {
+function Social({ href, Icon, color }: { href: string; Icon: any; color: string }) {
   if (!href) return null;
   return (
     <motion.a href={href} target="_blank" rel="noopener noreferrer"

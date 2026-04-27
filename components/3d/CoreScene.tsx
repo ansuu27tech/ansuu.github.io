@@ -64,14 +64,7 @@ const HoloGlassMaterial = shaderMaterial(
 );
 extend({ HoloGlassMaterial });
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      holoGlassMaterial: any;
-    }
-  }
-}
-
+// Removed global declaration, handled via ts-expect-error below
 // ── Face definitions ────────────────────────────────────────────────────────
 const FACES = [
   { pos: [0, 0, 1] as [number,number,number], rot: [0, 0, 0] as [number,number,number] },
@@ -203,6 +196,7 @@ function HoloCore({ isHovered, isExpanded }: { isHovered: boolean; isExpanded: b
       {FACES.map((face, i) => (
         <mesh key={i} position={face.pos} rotation={face.rot}>
           <planeGeometry args={[2, 2, 1, 1]} />
+          {/* @ts-expect-error: R3F dynamic material */}
           <holoGlassMaterial
             ref={(el: any) => (matRefs.current[i] = el)}
             uTime={0} uOpacity={0.75}
