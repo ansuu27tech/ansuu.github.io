@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import WebGLCursorMask from "../ui/WebGLCursorMask";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence, useInView, animate } from "framer-motion";
 import { ArrowRight, Linkedin } from "lucide-react";
 import AnimatedName from "@/components/ui/AnimatedName";
 import Logo from "../ui/Logo";
@@ -40,45 +40,42 @@ const RotatingText = () => {
         </div>
     );
 };
-const StatCounter = ({ end, suffix, label }: { end: number; suffix: string; label: string }) => {
-    const [count, setCount] = useState(0);
+import { useMotionValue } from "framer-motion";
+
+const StatCounter = ({ end, suffix, label, delayIndex }: { end: number; suffix: string; label: string, delayIndex: number }) => {
+    const count = useMotionValue(0);
+    const animatedCount = useTransform(count, (latest) => Math.round(latest));
     const ref = useRef<HTMLDivElement>(null);
+    const isInView = useInView(ref, { once: true, margin: "-20px" });
 
     useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) {
-                let start = 0;
-                const step = end > 100 ? Math.ceil(end / 40) : 1;
-                const duration = 1800; // 1.8s
-                const updates = Math.ceil(end / step);
-                const stepTime = Math.max(10, Math.floor(duration / updates));
-
-                const timer = setInterval(() => {
-                    start += step;
-                    if (start >= end) {
-                        setCount(end);
-                        clearInterval(timer);
-                    } else {
-                        setCount(start);
-                    }
-                }, stepTime);
-                observer.disconnect();
-            }
-        }, { threshold: 0.1 });
-
-        if (ref.current) observer.observe(ref.current);
-        return () => observer.disconnect();
-    }, [end]);
+        if (isInView) {
+            const controls = animate(count, end, {
+                type: "tween",
+                duration: 2.5,
+                ease: [0.22, 1, 0.36, 1],
+                delay: delayIndex * 0.2,
+            });
+            return () => controls.stop();
+        }
+    }, [isInView, end, delayIndex, count]);
 
     return (
-        <div ref={ref} className="flex flex-col items-end text-right">
-            <span className="font-bold leading-none bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]" style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1rem, 2vw, 1.5rem)" }}>
-                {count}{suffix}
-            </span>
-            <span className="text-gray-400 text-[0.55rem] md:text-[0.65rem] tracking-widest uppercase mt-0.5" style={{ fontFamily: "var(--font-exo2)" }}>
+        <motion.div 
+            ref={ref} 
+            initial={{ opacity: 0, x: 20 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: delayIndex * 0.2, ease: "easeOut" }}
+            className="flex flex-col items-end text-right glass-panel px-5 py-3 rounded-xl border border-white/5 hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden group min-w-[130px]"
+        >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none" />
+            <div className="font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-brand-mint to-cyan-400 drop-shadow-[0_0_12px_rgba(152,255,152,0.4)] flex items-center justify-end" style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}>
+                <motion.span>{animatedCount}</motion.span><span>{suffix}</span>
+            </div>
+            <span className="text-gray-300 text-[0.6rem] md:text-[0.65rem] tracking-[0.2em] uppercase mt-1.5 font-bold" style={{ fontFamily: "var(--font-syne)" }}>
                 {label}
             </span>
-        </div>
+        </motion.div>
     );
 };
 
@@ -203,7 +200,7 @@ export default function Hero() {
     return (
         <section
             ref={sectionRef}
-            className="relative w-full min-h-[100svh] md:h-[100svh] overflow-x-hidden md:overflow-hidden bg-black flex flex-col md:block pb-16 md:pb-0"
+            className="relative w-full min-h-[100svh] md:h-[100svh] overflow-x-hidden md:overflow-hidden bg-transparent flex flex-col md:block pb-16 md:pb-0"
         >
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ opacity: 0.5 }} />
@@ -257,8 +254,8 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none bg-gradient-to-t from-[#030305]/90 via-[#030305]/60 to-transparent" style={{ height: "58%" }} />
-            <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-[130px] bg-gradient-to-b from-[#030305]/70 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none bg-gradient-to-t from-[#030305]/100 via-[#030305]/70 to-transparent" style={{ height: "58%" }} />
+            <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-[130px] bg-gradient-to-b from-[#030305]/80 to-transparent" />
 
             <nav className="absolute top-0 left-0 w-full px-8 py-6 z-40 flex items-center gap-5">
                 <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
@@ -322,7 +319,7 @@ export default function Hero() {
                     { end: 350, suffix: "+", label: "Designs" },
                     { end: 2, suffix: "+", label: "Yrs Exp" }
                 ].map((stat, i) => (
-                    <StatCounter key={i} end={stat.end} suffix={stat.suffix} label={stat.label} />
+                    <StatCounter key={i} end={stat.end} suffix={stat.suffix} label={stat.label} delayIndex={i} />
                 ))}
             </div>
 

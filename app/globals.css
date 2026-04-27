@@ -2,11 +2,11 @@
 
 @theme {
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-outfit);
+  --font-heading: var(--font-syne);
   --font-serif: var(--font-playfair);
   --font-mono: var(--font-dm-mono);
 
-  --color-background: #050505;
+  --color-background: #030305;
   --color-foreground: #ededed;
 
   --color-brand-mint: #98ff98;
@@ -19,7 +19,7 @@
 }
 
 :root {
-  --background: #050505;
+  --background: #030305;
   --foreground: #ededed;
 }
 
@@ -105,9 +105,11 @@
 
 /* Utilities */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 10, 12, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
 }
 
 .text-gradient {
@@ -127,7 +129,8 @@ html {
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(circle at 50% 0%, #0c0c14 0%, var(--background) 70%);
+  background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -141,6 +144,7 @@ body {
   /* Prevent unwanted text size adjustment on mobile rotate */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  letter-spacing: -0.01em;
 }
 
 /* iOS notch / safe-area support */

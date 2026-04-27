@@ -32,7 +32,7 @@ export default function Impact() {
     const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
     return (
-        <section id="results" ref={sectionRef} className="relative w-full py-24 md:py-40 bg-[#050505] overflow-hidden">
+        <section id="results" ref={sectionRef} className="relative w-full py-24 md:py-40 bg-transparent overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col md:flex-row gap-16 md:gap-24 items-center">
                 
                 {/* Left Side: Sticky Title */}

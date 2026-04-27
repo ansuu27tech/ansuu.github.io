@@ -39,7 +39,7 @@ export default function WebShowcase() {
     const [selected, setSelected] = useState<Project | null>(null);
 
     return (
-        <SectionWrapper id="web-showcase" className="py-24 bg-[#050505]">
+        <SectionWrapper id="web-showcase" className="py-24 bg-transparent">
             {/* Header */}
             <div className="max-w-6xl mx-auto px-6">
                 <motion.div

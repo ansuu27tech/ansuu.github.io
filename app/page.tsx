@@ -18,12 +18,12 @@ const Impact = dynamic(() => import("@/components/sections/Impact"));
 import Intro from "@/components/ui/Intro";
 import Team from "@/components/sections/Team";
 
-import GlobalParallaxText from "@/components/ui/GlobalParallaxText";
+
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-[#050505] text-white selection:bg-brand-mint selection:text-black">
-      <GlobalParallaxText />
+    <main className="relative min-h-screen bg-transparent text-white selection:bg-brand-mint selection:text-black">
+
       <div className="relative z-10 bg-transparent">
         <Intro />
         <Hero />

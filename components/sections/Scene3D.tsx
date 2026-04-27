@@ -8,7 +8,7 @@ const Scene3DCanvas = dynamic(() => import("../ui/Scene3DCanvas"), { ssr: false 
 
 export default function Scene3D() {
     return (
-        <section className="relative w-full h-[500px] bg-[#050505] overflow-hidden flex items-center justify-center">
+        <section className="relative w-full h-[500px] bg-transparent overflow-hidden flex items-center justify-center">
             {/* Background glow */}
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,255,178,0.04)_0%,transparent_70%)] pointer-events-none" />
 

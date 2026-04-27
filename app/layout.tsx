@@ -59,6 +59,8 @@ export const viewport: Viewport = {
 
 import CustomCursor from "@/components/ui/CustomCursor";
 import VisitorTracker from "@/components/ui/VisitorTracker";
+import SmoothScroll from "@/components/ui/SmoothScroll";
+import AICoreGift from "@/components/ui/AICoreGift";
 
 export default function RootLayout({
   children,
@@ -66,13 +68,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <body
-        className={`${inter.variable} ${outfit.variable} ${orbitron.variable} ${exo2.variable} ${playfair.variable} ${dmMono.variable} ${syne.variable} ${spaceMono.variable} antialiased bg-[#050505] text-white selection:bg-brand-mint selection:text-black overflow-x-clip`}
+        className={`${inter.variable} ${outfit.variable} ${orbitron.variable} ${exo2.variable} ${playfair.variable} ${dmMono.variable} ${syne.variable} ${spaceMono.variable} antialiased bg-[#050505] text-white selection:bg-brand-mint selection:text-black overflow-x-clip font-sans`}
       >
         <VisitorTracker />
         <CustomCursor />
-        {children}
+        <AICoreGift />
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   );

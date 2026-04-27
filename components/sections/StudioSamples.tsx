@@ -17,7 +17,7 @@ const studioItems = [
 
 export default function StudioSamples() {
     return (
-        <SectionWrapper id="studio-samples" className="bg-[#050505] !py-0 overflow-hidden">
+        <SectionWrapper id="studio-samples" className="bg-transparent !py-0 overflow-hidden">
             {/* Header */}
             <div className="pt-24 pb-12 px-6 md:px-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>

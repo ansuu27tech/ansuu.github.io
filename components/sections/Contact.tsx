@@ -67,7 +67,7 @@ export default function Contact() {
     };
 
     return (
-        <footer className="bg-[#050505] text-white overflow-hidden relative">
+        <footer className="bg-transparent text-white overflow-hidden relative">
             <SectionWrapper id="contact" className="py-32">
                 <div className="max-w-4xl mx-auto text-center relative z-10">
                     <motion.h2

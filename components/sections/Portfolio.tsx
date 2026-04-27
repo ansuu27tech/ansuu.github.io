@@ -133,7 +133,7 @@ export default function Portfolio() {
     const selectedProject = projects.find((p) => p.id === selectedId);
 
     return (
-        <SectionWrapper id="portfolio" className="bg-[#050505]">
+        <SectionWrapper id="portfolio" className="bg-transparent">
             {/* Header */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
                 <div>

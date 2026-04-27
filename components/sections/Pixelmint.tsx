@@ -16,7 +16,7 @@ export default function Pixelmint() {
     const scale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1]);
 
     return (
-        <SectionWrapper id="pixelmint" className="bg-[#050505] relative overflow-hidden">
+        <SectionWrapper id="pixelmint" className="bg-transparent relative overflow-hidden">
             {/* Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-mint/10 rounded-full blur-[120px] pointer-events-none" />
 

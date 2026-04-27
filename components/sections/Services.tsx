@@ -29,7 +29,7 @@ const services = [
 
 export default function Services() {
     return (
-        <SectionWrapper id="services" className="bg-[#050505]">
+        <SectionWrapper id="services" className="bg-transparent">
             <div className="mb-16">
                 <motion.h2
                     initial={{ opacity: 0, x: -20 }}
@@ -56,7 +56,7 @@ export default function Services() {
                                 zIndex: 10,
                                 boxShadow: "0 20px 40px -10px rgba(152, 255, 152, 0.1)"
                             }}
-                            className="bg-transparent border border-white/5 p-8 rounded-xl h-full flex flex-col justify-between hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden"
+                            className="glass-panel p-8 rounded-xl h-full flex flex-col justify-between hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-black/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
