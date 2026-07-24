@@ -75,13 +75,15 @@ export default function About() {
                         className="relative aspect-[3/4] w-full"
                         initial={{ opacity: 0, clipPath: "inset(100% 0 0 0)" }}
                         animate={isInView ? { opacity: 1, clipPath: "inset(0 0 0 0)" } : {}}
-                        transition={{ duration: 1, ease: "circOut" }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <div className="absolute inset-0 bg-brand-mint/20 -translate-x-4 translate-y-4 rounded-xl" />
                         <Image
-                            src="/about-profile.jpg"
+                            src="/mohammed anas founder.jpeg"
                             alt="Anas - Pixelmint Studio"
                             fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover rounded-xl filter grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
                         />
                     </motion.div>
@@ -99,7 +101,7 @@ export default function About() {
                     <motion.div
                         initial={{ opacity: 0, x: 50 }}
                         animate={isInView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">
                             About <span className="text-brand-mint">Me.</span>

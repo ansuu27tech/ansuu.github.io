@@ -98,6 +98,45 @@
   }
 }
 
+@keyframes gradient-border-spin {
+  0%   { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
+@keyframes shimmer-slide {
+  from { transform: translateX(-100%) skewX(-12deg); }
+  to   { transform: translateX(200%) skewX(-12deg); }
+}
+
+@keyframes float-particle {
+  0%, 100% { transform: translateY(0px) scale(1); opacity: 0; }
+  30%       { opacity: 0.8; }
+  70%       { opacity: 0.6; }
+  100%      { transform: translateY(-60px) scale(0.3); opacity: 0; }
+}
+
+@keyframes aurora-pulse {
+  0%, 100% { opacity: 0.12; transform: scale(1) rotate(0deg); }
+  50%       { opacity: 0.22; transform: scale(1.08) rotate(3deg); }
+}
+
+@keyframes hero-orb-breathe {
+  0%, 100% { opacity: 0.18; transform: scale(1); }
+  50%       { opacity: 0.38; transform: scale(1.12); }
+}
+
+@keyframes border-glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(34,211,238,0.2), 0 0 40px rgba(34,211,238,0.1); }
+  50%       { box-shadow: 0 0 40px rgba(34,211,238,0.5), 0 0 80px rgba(34,211,238,0.2); }
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+
 @keyframes teamPulse {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.7); }
@@ -145,6 +184,44 @@ body {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
   letter-spacing: -0.01em;
+}
+
+/* ── GPU-promote all animated sections for buttery-smooth transforms ── */
+section {
+  /* content-visibility: auto skips layout+paint for off-screen sections */
+  /* This is one of the highest-impact CSS perf tricks for long pages */
+  content-visibility: auto;
+  /* Give the browser a size hint so it can calculate layout without rendering */
+  contain-intrinsic-size: 0 600px;
+}
+
+/* The hero is always visible — don't skip it */
+section:first-of-type {
+  content-visibility: visible;
+  contain-intrinsic-size: none;
+}
+
+/* ── Smooth default transitions for interactive elements ── */
+a, button, [role="button"] {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Shared easing tokens as custom properties ── */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-smooth: cubic-bezier(0.45, 0, 0.55, 1);
+}
+
+/* ── Optimized image rendering ── */
+img {
+  content-visibility: auto;
+}
+
+/* ── Prevent compositing jank on glass panels ── */
+.glass-panel {
+  transform: translateZ(0);
+  will-change: auto;
 }
 
 /* iOS notch / safe-area support */

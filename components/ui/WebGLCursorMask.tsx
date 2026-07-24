@@ -299,10 +299,18 @@ export default function WebGLCursorMask({ bgSrc, fgSrc }: Props) {
     let raf = 0;
     const posArr = new Float32Array(20 * 2);
     const radArr = new Float32Array(20);
+    let isVisible = true;
+
+    // Pause WebGL rendering when canvas is scrolled out of view
+    const visibilityObs = new IntersectionObserver(
+      ([entry]) => { isVisible = entry.isIntersecting; },
+      { threshold: 0 }
+    );
+    visibilityObs.observe(canvas);
 
     function frame() {
       raf = requestAnimationFrame(frame);
-      if (!gl) return;
+      if (!gl || !isVisible) return;
 
       if (cursor.tx > -1) {
         cursor.x += (cursor.tx - cursor.x) * 0.09;
@@ -349,6 +357,7 @@ export default function WebGLCursorMask({ bgSrc, fgSrc }: Props) {
 
     return () => {
       cancelAnimationFrame(raf);
+      visibilityObs.disconnect();
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouse);
       window.removeEventListener('mouseleave', onLeave);

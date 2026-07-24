@@ -9,14 +9,13 @@ const Pixelmint = dynamic(() => import("@/components/sections/Pixelmint"));
 const Services = dynamic(() => import("@/components/sections/Services"));
 const Scene3D = dynamic(() => import("@/components/sections/Scene3D"));
 const Portfolio = dynamic(() => import("@/components/sections/Portfolio"));
-const StudioSamples = dynamic(() => import("@/components/sections/StudioSamples"));
 const WebShowcase = dynamic(() => import("@/components/sections/WebShowcase"));
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials"));
 const Contact = dynamic(() => import("@/components/sections/Contact"));
 const Mindset = dynamic(() => import("@/components/sections/Mindset"));
 const Impact = dynamic(() => import("@/components/sections/Impact"));
-import Intro from "@/components/ui/Intro";
-import Team from "@/components/sections/Team";
+// Intro is also lazy-loaded — not needed at first paint
+const Intro = dynamic(() => import("@/components/ui/Intro"));
 
 
 
@@ -32,11 +31,10 @@ export default function Home() {
         <Impact />
         <Experience />
         <Pixelmint />
-        <Team />
+
         <Services />
         <Scene3D />
         <Portfolio />
-        <StudioSamples />
         <WebShowcase />
         <Testimonials />
         <Contact />

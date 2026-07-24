@@ -9,11 +9,11 @@ export default function Intro() {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
-        // Total sequence: 3.5s
+        // Total sequence: 2.5s (reduced from 3.5s for faster interactivity)
         const timer = setTimeout(() => {
             setShow(false);
             document.body.style.overflow = "auto";
-        }, 3500);
+        }, 2500);
 
         return () => {
             document.body.style.overflow = "auto";
@@ -67,7 +67,7 @@ export default function Intro() {
                             opacity: [0, 1, 1, 0]
                         }}
                         transition={{
-                            duration: 3.5,
+                            duration: 2.5,
                             times: [0, 0.2, 0.8, 1],
                             ease: "easeInOut"
                         }}

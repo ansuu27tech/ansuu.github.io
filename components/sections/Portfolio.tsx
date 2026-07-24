@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { useState, useRef, useCallback } from "react";
 import { ArrowUpRight, X, ExternalLink } from "lucide-react";
 import Image from "next/image";
 import SectionWrapper from "../ui/SectionWrapper";
@@ -21,6 +21,7 @@ interface Project {
     year: string;
     role: string;
     image: string;
+    liveUrl?: string;
 }
 
 const projects: Project[] = [
@@ -45,18 +46,19 @@ const projects: Project[] = [
         id: 2,
         index: "02",
         title: "Pixelmint Studio",
-        subtitle: "Creative Brand Identity System",
-        category: "Branding · Design",
-        tags: ["Visual Identity", "Motion", "Web"],
-        gradient: "from-rose-950 via-pink-900 to-fuchsia-950",
-        accentColor: "#f472b6",
+        subtitle: "Official Agency Website — Built End-to-End",
+        category: "Studio",
+        tags: ["Next.js", "Web Design", "Agency", "Branding"],
+        gradient: "from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a]",
+        accentColor: "#a3e635",
         description:
-            "Full brand identity creation for Pixelmint Studio — a design-forward creative agency. Designed the logo system, color language, typography scale, and a bespoke portfolio site with cinematic scroll animations.",
-        outcome: "Launched with 40+ client inquiries in the first month.",
-        stack: ["Figma", "Next.js", "Framer Motion", "GSAP"],
-        year: "2024",
+            "Designed and developed the complete digital identity for Pixelmint Studio — a premium creative agency website featuring multi-page architecture, team showcase, 11-service grid, client testimonials, and a conversion-optimised contact system.",
+        outcome: "Serving clients across 25+ countries with a 99% satisfaction rate.",
+        stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+        year: "2026",
         role: "Founder & Creative Director",
-        image: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
+        image: "/pixelmint-logo.jpg",
+        liveUrl: "https://pixelmint-studio-delta.vercel.app",
     },
     {
         id: 3,
@@ -128,6 +130,98 @@ const projects: Project[] = [
     },
 ];
 
+function ProjectCard({ project, i, onSelect }: { project: Project; i: number; onSelect: () => void }) {
+    const cardRef = useRef<HTMLDivElement>(null);
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+    const imgX = useSpring(useTransform(mouseX, [0, 1], [-12, 12]), { stiffness: 150, damping: 20 });
+    const imgY = useSpring(useTransform(mouseY, [0, 1], [-8, 8]), { stiffness: 150, damping: 20 });
+
+    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+        const r = cardRef.current?.getBoundingClientRect();
+        if (!r) return;
+        mouseX.set((e.clientX - r.left) / r.width);
+        mouseY.set((e.clientY - r.top) / r.height);
+    }, [mouseX, mouseY]);
+
+    const handleMouseLeave = useCallback(() => {
+        mouseX.set(0.5);
+        mouseY.set(0.5);
+    }, [mouseX, mouseY]);
+
+    return (
+        <motion.div
+            ref={cardRef}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            onClick={onSelect}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+            className="group cursor-pointer relative overflow-hidden rounded-2xl bg-white/[0.02] transition-all duration-500 hover:-translate-y-2"
+            style={{
+                minHeight: "340px",
+                border: `1px solid rgba(255,255,255,0.06)`,
+                ...(project.liveUrl ? { boxShadow: "0 0 30px rgba(132,204,22,0.15)" } : {}),
+            }}
+            whileHover={{ borderColor: `${project.accentColor}40`, boxShadow: `0 20px 40px -15px rgba(0,0,0,0.7), 0 0 0 1px ${project.accentColor}30, 0 0 40px -10px ${project.accentColor}30` }}
+        >
+            {/* Parallax image */}
+            <div className="absolute inset-0 overflow-hidden">
+                <motion.div className="absolute inset-[-10%] w-[120%] h-[120%]" style={{ x: imgX, y: imgY }}>
+                    <div className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity duration-700">
+                        <Image src={project.image} alt={project.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
+                    </div>
+                </motion.div>
+                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-45`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+            </div>
+
+            {/* Hover glow border inset */}
+            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: `inset 0 0 0 1px ${project.accentColor}30` }} />
+
+            {/* Content */}
+            <div className="relative z-10 p-8 h-full flex flex-col justify-between" style={{ minHeight: "340px" }}>
+                <div className="flex items-start justify-between">
+                    <span className="text-5xl font-heading font-bold leading-none opacity-20 select-none group-hover:opacity-50 transition-opacity duration-300" style={{ color: project.accentColor }}>
+                        {project.index}
+                    </span>
+                    <div className="flex items-center gap-2">
+                        {project.liveUrl && (
+                            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400">
+                                <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
+                                LIVE
+                            </span>
+                        )}
+                        <span className="text-[10px] uppercase tracking-widest font-medium px-3 py-1 rounded-full border" style={{ color: project.accentColor, borderColor: `${project.accentColor}40`, background: `${project.accentColor}10` }}>
+                            {project.category.split("·")[0].trim()}
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <div className="flex flex-wrap gap-2 mb-5">
+                        {project.tags.map((tag) => (
+                            <span key={tag} className="text-[9px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 uppercase tracking-widest backdrop-blur-md">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                    <h3 className="text-2xl font-heading font-bold text-white mb-1 leading-tight">{project.title}</h3>
+                    <p className="text-white/40 text-sm mb-5">{project.subtitle}</p>
+                    <div className="flex items-center justify-between">
+                        <span className="text-xs text-white/25 tracking-widest">{project.year}</span>
+                        <div className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/40 group-hover:bg-white/10 transition-all duration-300">
+                            <ArrowUpRight size={14} className="text-white/40 group-hover:text-white transition-colors" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </motion.div>
+    );
+}
+
 export default function Portfolio() {
     const [selectedId, setSelectedId] = useState<number | null>(null);
     const selectedProject = projects.find((p) => p.id === selectedId);
@@ -172,93 +266,7 @@ export default function Portfolio() {
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                 {projects.map((project, i) => (
-                    <motion.div
-                        key={project.id}
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-60px" }}
-                        transition={{
-                            duration: 0.6,
-                            delay: i * 0.08,
-                            ease: [0.16, 1, 0.3, 1],
-                        }}
-                        onClick={() => setSelectedId(project.id)}
-                        className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] hover:border-white/15 transition-all duration-500"
-                        style={{ minHeight: "340px" }}
-                    >
-                        {/* Project Image with gradient overlay */}
-                        <div className="absolute inset-0 overflow-hidden" style={{ willChange: 'transform' }}>
-                            <div
-                                className="absolute inset-0 opacity-65 group-hover:opacity-85 transition-opacity duration-700 ease-out"
-                            >
-                                <Image
-                                    src={project.image}
-                                    alt={project.title}
-                                    fill
-                                    className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                                    sizes="(max-width: 768px) 100vw, 33vw"
-                                />
-                            </div>
-                            {/* Dark + gradient overlay */}
-                            <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-45`} />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/5 to-transparent" />
-                        </div>
-
-                        {/* Content */}
-                        <div className="relative z-10 p-8 h-full flex flex-col justify-between" style={{ minHeight: "340px" }}>
-                            {/* Top Row */}
-                            <div className="flex items-start justify-between">
-                                <span
-                                    className="text-5xl font-heading font-bold leading-none opacity-20 select-none"
-                                    style={{ color: project.accentColor }}
-                                >
-                                    {project.index}
-                                </span>
-                                <div className="flex items-center gap-2">
-                                    <span
-                                        className="text-[10px] uppercase tracking-widest font-medium px-3 py-1 rounded-full border"
-                                        style={{
-                                            color: project.accentColor,
-                                            borderColor: `${project.accentColor}40`,
-                                            background: `${project.accentColor}10`,
-                                        }}
-                                    >
-                                        {project.category.split("·")[0].trim()}
-                                    </span>
-                                </div>
-                            </div>
-
-                            {/* Bottom Content */}
-                            <div>
-                                {/* Tags */}
-                                <div className="flex flex-wrap gap-2 mb-5">
-                                    {project.tags.map((tag) => (
-                                        <span
-                                            key={tag}
-                                            className="text-[10px] px-2.5 py-1 rounded-full bg-white/5 border border-white/10 text-white/50 uppercase tracking-wider"
-                                        >
-                                            {tag}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <h3 className="text-2xl font-heading font-bold text-white mb-1 leading-tight group-hover:text-white transition-colors">
-                                    {project.title}
-                                </h3>
-                                <p className="text-white/40 text-sm mb-5">{project.subtitle}</p>
-
-                                {/* CTA Row */}
-                                <div className="flex items-center justify-between">
-                                    <span className="text-xs text-white/25 tracking-widest">{project.year}</span>
-                                    <div
-                                        className="w-8 h-8 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/30 group-hover:bg-white/5 transition-all duration-300"
-                                    >
-                                        <ArrowUpRight size={14} className="text-white/40 group-hover:text-white/80 transition-colors" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </motion.div>
+                    <ProjectCard key={project.id} project={project} i={i} onSelect={() => setSelectedId(project.id)} />
                 ))}
             </div>
 
@@ -278,11 +286,11 @@ export default function Portfolio() {
 
                         {/* Modal Card */}
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full max-w-2xl rounded-3xl overflow-hidden border border-white/10 bg-[#0b0b0f] shadow-2xl"
+                            initial={{ opacity: 0, scale: 0.95, y: 40, filter: "blur(10px)" }}
+                            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20, filter: "blur(10px)" }}
+                            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                            className="relative w-full max-w-3xl rounded-3xl overflow-hidden border border-white/10 bg-[#050508] shadow-2xl"
                         >
                             {/* Image Banner */}
                             <div className="w-full h-52 relative overflow-hidden">
@@ -355,6 +363,18 @@ export default function Portfolio() {
                                     </p>
                                     <p className="text-white/80 text-sm font-medium">{selectedProject.outcome}</p>
                                 </div>
+
+                                {/* Live Site Link */}
+                                {selectedProject.liveUrl && (
+                                    <a
+                                        href={selectedProject.liveUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 rounded-full text-sm font-bold bg-lime-400 text-black hover:bg-lime-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(163,230,53,0.4)]"
+                                    >
+                                        Visit Live Site <ArrowUpRight size={14} />
+                                    </a>
+                                )}
 
                                 {/* Meta Row */}
                                 <div className="flex flex-wrap items-center justify-between gap-4">

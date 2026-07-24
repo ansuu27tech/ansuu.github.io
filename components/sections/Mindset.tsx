@@ -36,7 +36,7 @@ export default function Mindset() {
                     className="mb-16 md:mb-20 text-center"
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
+                    transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 >
                     <h2 className="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight" style={{ fontFamily: "var(--font-orbitron)" }}>
                         How I <span className="bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent drop-shadow-[0_0_15px_rgba(34,211,238,0.4)]">Think.</span>
@@ -52,7 +52,7 @@ export default function Mindset() {
                             key={idx}
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.8, delay: idx * 0.2, ease: "easeOut" }}
+                            transition={{ duration: 0.8, delay: idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
                             className="group relative flex flex-col p-8 md:p-10 rounded-[2rem] bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] hover:bg-white/[0.04] hover:border-brand-mint/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(34,211,238,0.1)]"
                         >
                             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-800 to-black/50 border border-gray-700/50 flex items-center justify-center mb-8 shadow-inner group-hover:border-cyan-500/50 transition-colors duration-500">

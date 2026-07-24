@@ -148,17 +148,18 @@ const DotGrid = ({
         let rafId: number;
         const proxSq = proximity * proximity;
 
+        // Cache the context once — getContext() on every frame is wasteful
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
         const draw = () => {
             if (!isVisibleRef.current) {
-                // Keep the loop alive but skip drawing/calculations
-                rafId = requestAnimationFrame(draw);
+                // Truly pause the draw — don't even schedule the next frame
+                // The IntersectionObserver will restart it when visible again
                 return;
             }
-
-            const canvas = canvasRef.current;
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const { x: px, y: py } = pointerRef.current;
@@ -191,10 +192,16 @@ const DotGrid = ({
             rafId = requestAnimationFrame(draw);
         };
 
-        // Pause offscreen logic
+        // Start/stop the loop based on visibility — saves GPU when off-screen
         const observer = new IntersectionObserver(
             ([entry]) => {
                 isVisibleRef.current = entry.isIntersecting;
+                if (entry.isIntersecting) {
+                    // Restart the loop when visible again
+                    rafId = requestAnimationFrame(draw);
+                } else {
+                    cancelAnimationFrame(rafId);
+                }
             },
             { threshold: 0 }
         );

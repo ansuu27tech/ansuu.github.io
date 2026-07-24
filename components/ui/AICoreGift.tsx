@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { X, Zap, ArrowUpRight, Brain, ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 // ── Quantum Prism Widget ─────────────────────────────────────────────────────
 
@@ -309,6 +310,7 @@ const CARDS = {
     emoji:"🎁", badge:"Content Creator's Edge",
     from:"#f59e0b", to:"#ef4444",
     glow:"rgba(245,158,11,0.35)", border:"rgba(245,158,11,0.22)",
+    image:"/gift-creator.png",
     title:"The Viral Hook Formula",
     sub:"Stop the scroll. Command the click.",
     body:"Unlock my private vault of high-CTR thumbnail structures and scroll-stopping visual psychology tactics used across 100M+ viewed content.",
@@ -319,6 +321,7 @@ const CARDS = {
     emoji:"💎", badge:"Executive Strategy",
     from:"#a855f7", to:"#6366f1",
     glow:"rgba(168,85,247,0.35)", border:"rgba(168,85,247,0.22)",
+    image:"/gift-brand.png",
     title:"The Brand Elevation Audit",
     sub:"Clarity before creativity. Strategy before aesthetics.",
     body:"Elevate your digital presence from invisible to premium. Claim a complimentary, zero-BS breakdown of your current brand. Let's find your missing conversions.",
@@ -329,6 +332,7 @@ const CARDS = {
     emoji:"🚀", badge:"Tech Innovator",
     from:"#22d3ee", to:"#34d399",
     glow:"rgba(34,211,238,0.35)", border:"rgba(52,211,153,0.22)",
+    image:"/gift-tech.png",
     title:"The AI-Driven UI Blueprint",
     sub:"Where complex algorithms meet intuitive design.",
     body:"Building a next-gen product? Grab my exclusive framework blending AI functionalities with glassmorphic UI design that users inherently trust.",
@@ -448,7 +452,22 @@ function GiftCard({ role, onBack, onClose }: { role:RoleKey; onBack:()=>void; on
         </motion.h2>
         <motion.p initial={{opacity:0}} animate={{opacity:1}} transition={{delay:0.18}}
           className="text-gray-400 text-[12px] italic mb-4 tracking-wide">{card.sub}</motion.p>
-        <motion.p initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.26}}
+
+        {/* Gift Image Preview */}
+        <motion.div
+          initial={{opacity:0,scale:0.92}} animate={{opacity:1,scale:1}} transition={{delay:0.22}}
+          className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden mb-5 border"
+          style={{borderColor:card.border,boxShadow:`0 0 30px ${card.glow}`}}
+        >
+          <Image src={card.image} alt={card.title} fill className="object-cover" sizes="400px" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute bottom-3 left-3 flex items-center gap-2">
+            <span className="text-[9px] font-mono tracking-widest uppercase px-2.5 py-1 rounded-full border"
+              style={{color:card.from,borderColor:card.border,background:"rgba(0,0,0,0.6)",backdropFilter:"blur(8px)"}}>🎁 Exclusive Gift</span>
+          </div>
+        </motion.div>
+
+        <motion.p initial={{opacity:0,y:8}} animate={{opacity:1,y:0}} transition={{delay:0.30}}
           className="text-gray-300 text-[13px] leading-relaxed mb-5">{card.body}</motion.p>
 
         <motion.div initial={{opacity:0,scale:0.95}} animate={{opacity:1,scale:1}} transition={{delay:0.36}}
@@ -492,7 +511,7 @@ export default function AICoreGift() {
           <motion.div
             initial={{opacity:0,scale:0.4,y:30}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:0.4,y:30}}
             transition={{type:"spring",damping:20,stiffness:260,delay:1.5}}
-            className="fixed bottom-6 right-6 z-[9999] select-none"
+            className="fixed bottom-6 left-6 z-[9999] select-none"
           >
             <div
               onMouseEnter={()=>setIsHovered(true)}

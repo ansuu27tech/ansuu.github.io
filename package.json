@@ -11,7 +11,6 @@
   "dependencies": {
     "@ai-sdk/openai": "^0.0.14",
     "@ai-sdk/react": "^0.0.9",
-    "@imgly/background-removal-node": "^1.4.5",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
     "@types/canvas-confetti": "^1.9.0",

@@ -2,8 +2,8 @@
 
 import { useRef, useEffect, useState } from "react";
 import WebGLCursorMask from "../ui/WebGLCursorMask";
-import { motion, useScroll, useTransform, AnimatePresence, useInView, animate } from "framer-motion";
-import { ArrowRight, Linkedin } from "lucide-react";
+import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Linkedin } from "lucide-react";
 import AnimatedName from "@/components/ui/AnimatedName";
 import Logo from "../ui/Logo";
 import OrbitingIcons from "../ui/OrbitingIcons";
@@ -27,12 +27,12 @@ const RotatingText = () => {
             <AnimatePresence mode="wait">
                 <motion.p
                     key={index}
-                    initial={{ y: 14, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: -14, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    initial={{ y: 15, opacity: 0, filter: "blur(8px)", scale: 0.95 }}
+                    animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
+                    exit={{ y: -15, opacity: 0, filter: "blur(8px)", scale: 1.05 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                     className="absolute text-gray-300 font-normal whitespace-nowrap text-center"
-                    style={{ fontSize: "0.9rem", fontFamily: "var(--font-exo2)", letterSpacing: "0.08em" }}
+                    style={{ fontSize: "0.9rem", fontFamily: "var(--font-exo2)", letterSpacing: "0.08em", willChange: "transform, opacity, filter" }}
                 >
                     {texts[index]}
                 </motion.p>
@@ -40,37 +40,53 @@ const RotatingText = () => {
         </div>
     );
 };
-import { useMotionValue } from "framer-motion";
+
 
 const StatCounter = ({ end, suffix, label, delayIndex }: { end: number; suffix: string; label: string, delayIndex: number }) => {
-    const count = useMotionValue(0);
-    const animatedCount = useTransform(count, (latest) => Math.round(latest));
+    const [count, setCount] = useState(0);
     const ref = useRef<HTMLDivElement>(null);
     const isInView = useInView(ref, { once: true, margin: "-20px" });
 
     useEffect(() => {
-        if (isInView) {
-            const controls = animate(count, end, {
-                type: "tween",
-                duration: 2.5,
-                ease: [0.22, 1, 0.36, 1],
-                delay: delayIndex * 0.2,
-            });
-            return () => controls.stop();
-        }
-    }, [isInView, end, delayIndex, count]);
+        if (!isInView) return;
+
+        const duration = 2500;
+        const delayMs = delayIndex * 200;
+        let startTime: number | null = null;
+        let rafId: number;
+
+        const timeout = setTimeout(() => {
+            const step = (timestamp: number) => {
+                if (!startTime) startTime = timestamp;
+                const progress = Math.min((timestamp - startTime) / duration, 1);
+                // Ease-out cubic for a smooth deceleration
+                const eased = 1 - Math.pow(1 - progress, 3);
+                setCount(Math.round(eased * end));
+                if (progress < 1) {
+                    rafId = requestAnimationFrame(step);
+                }
+            };
+            rafId = requestAnimationFrame(step);
+        }, delayMs);
+
+        return () => {
+            clearTimeout(timeout);
+            if (rafId) cancelAnimationFrame(rafId);
+        };
+    }, [isInView, end, delayIndex]);
 
     return (
         <motion.div 
             ref={ref} 
             initial={{ opacity: 0, x: 20 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: delayIndex * 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.8, delay: delayIndex * 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-end text-right glass-panel px-5 py-3 rounded-xl border border-white/5 hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden group min-w-[130px]"
+            style={{ willChange: "transform, opacity" }}
         >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none" />
             <div className="font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-brand-mint to-cyan-400 drop-shadow-[0_0_12px_rgba(152,255,152,0.4)] flex items-center justify-end" style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}>
-                <motion.span>{animatedCount}</motion.span><span>{suffix}</span>
+                <span>{count}</span><span>{suffix}</span>
             </div>
             <span className="text-gray-300 text-[0.6rem] md:text-[0.65rem] tracking-[0.2em] uppercase mt-1.5 font-bold" style={{ fontFamily: "var(--font-syne)" }}>
                 {label}
@@ -93,7 +109,7 @@ export default function Hero() {
 
     useEffect(() => {
         setParticles(
-            Array.from({ length: 25 }, () => ({
+            Array.from({ length: 18 }, () => ({
                 x: Math.random() * 100,
                 y: Math.random() * 100,
                 s: Math.random() * 2 + 1,
@@ -112,8 +128,10 @@ export default function Hero() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        const COUNT = 70;
-        const LINK_DIST = 180;
+        // Fewer nodes on mobile for better perf
+        const isMobile = window.innerWidth < 768;
+        const COUNT = isMobile ? 30 : 50;
+        const LINK_DIST = 160;
         const FACE_R_FRAC = 0.30;
 
         const nodes = Array.from({ length: COUNT }, () => {
@@ -134,7 +152,15 @@ export default function Hero() {
         resize();
         window.addEventListener("resize", resize);
 
+        let isVisible = true;
+
         const draw = () => {
+            // Skip drawing when section is off-screen — saves GPU/CPU
+            if (!isVisible) {
+                lineRafRef.current = requestAnimationFrame(draw);
+                return;
+            }
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const cx = canvas.width  / 2;
             const cy = canvas.height / 2;
@@ -163,13 +189,15 @@ export default function Hero() {
                 }
             }
 
+            // Use squared distance check to avoid Math.sqrt in the inner loop
+            const linkDistSq = LINK_DIST * LINK_DIST;
             for (let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
                     const dx = nodes[i].x - nodes[j].x;
                     const dy = nodes[i].y - nodes[j].y;
-                    const dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < LINK_DIST) {
-                        const alpha = (1 - dist / LINK_DIST) * 0.22;
+                    const dsq = dx * dx + dy * dy;
+                    if (dsq < linkDistSq) {
+                        const alpha = (1 - Math.sqrt(dsq) / LINK_DIST) * 0.22;
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -189,11 +217,20 @@ export default function Hero() {
             ctx.restore();
             lineRafRef.current = requestAnimationFrame(draw);
         };
+
+        // Pause canvas when hero section scrolls out of view
+        const observer = new IntersectionObserver(
+            ([entry]) => { isVisible = entry.isIntersecting; },
+            { threshold: 0 }
+        );
+        if (sectionRef.current) observer.observe(sectionRef.current);
+
         draw();
 
         return () => {
             window.removeEventListener("resize", resize);
             if (lineRafRef.current) cancelAnimationFrame(lineRafRef.current);
+            observer.disconnect();
         };
     }, []);
 
@@ -203,6 +240,16 @@ export default function Hero() {
             className="relative w-full min-h-[100svh] md:h-[100svh] overflow-x-hidden md:overflow-hidden bg-transparent flex flex-col md:block pb-16 md:pb-0"
         >
             <div className="absolute inset-0 z-0 pointer-events-none">
+                {/* Aurora orbs */}
+                <div className="absolute" style={{ top: "20%", left: "10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(34,211,238,0.18) 0%, transparent 65%)", filter: "blur(80px)", animation: "hero-orb-breathe 7s ease-in-out infinite" }} />
+                <div className="absolute" style={{ top: "30%", right: "10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 65%)", filter: "blur(80px)", animation: "hero-orb-breathe 9s ease-in-out infinite reverse" }} />
+                <div className="absolute" style={{ bottom: "10%", left: "30%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(52,211,153,0.10) 0%, transparent 65%)", filter: "blur(60px)", animation: "hero-orb-breathe 11s ease-in-out infinite" }} />
+                <motion.div 
+                    className="absolute inset-0 z-0"
+                    animate={{ opacity: [0.15, 0.35, 0.15], scale: [1, 1.05, 1] }}
+                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+                    style={{ background: "radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.15) 0%, transparent 50%)" }}
+                />
                 <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ opacity: 0.5 }} />
 
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
@@ -234,9 +281,9 @@ export default function Hero() {
 
                 {particles?.map((p, i) => (
                     <motion.div key={i} className="absolute rounded-full bg-blue-400"
-                        style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.s, height: p.s, opacity: 0 }}
+                        style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.s, height: p.s, opacity: 0, willChange: "transform, opacity" }}
                         animate={{ y: [0, -60, 0], opacity: [0, 0.35, 0] }}
-                        transition={{ duration: p.d, repeat: Infinity, delay: p.dl, ease: "easeInOut" }} />
+                        transition={{ duration: p.d, repeat: Infinity, delay: p.dl, ease: [0.45, 0, 0.55, 1] }} />
                 ))}
             </div>
 
@@ -267,11 +314,29 @@ export default function Hero() {
                     </span>
                     <span className="text-gray-300 text-[0.7rem] md:text-sm tracking-[0.6em] mt-1 uppercase" style={{ fontFamily: "var(--font-exo2)" }}>STUDIO</span>
                 </div>
+
+                <motion.a
+                    href="https://pixelmint-studio-delta.vercel.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: -20, filter: "blur(8px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    transition={{ duration: 0.9, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    className="ml-auto group relative flex items-center gap-1.5 md:gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm text-cyan-300 border border-cyan-400/30 bg-white/[0.04] backdrop-blur-xl overflow-hidden transition-all duration-500 hover:scale-105 hover:border-cyan-300/60 hover:shadow-[0_0_35px_rgba(34,211,238,0.35)] hover:-translate-y-0.5 active:scale-95"
+                >
+                    {/* Hover background gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    {/* Shine sweep */}
+                    <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12" style={{ background: "linear-gradient(90deg, transparent, rgba(34,211,238,0.25), transparent)" }} />
+                    <span className="relative z-10 tracking-wider uppercase" style={{ fontFamily: "var(--font-exo2)" }}>Explore Studio</span>
+                    <ArrowUpRight className="relative z-10 w-3.5 h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </motion.a>
             </nav>
 
             <motion.div
                 className="relative md:absolute md:inset-0 z-30 w-full order-2 md:order-none pointer-events-none mt-6 md:mt-0"
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}>
+                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                style={{ willChange: "transform, opacity" }}>
 
                 <div className="md:absolute md:top-[68vh] lg:top-[70vh] left-0 right-0 flex flex-col items-center justify-center text-center w-full px-4 pointer-events-auto mb-16 md:mb-0">
                     <AnimatedName />
@@ -284,10 +349,13 @@ export default function Hero() {
                     <div className="flex justify-start">
                         <MagneticButton strength={30}>
                             <button onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-                                className="group flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(59,130,246,0.65)] active:scale-95 whitespace-nowrap text-sm md:text-base"
+                                className="group relative overflow-hidden flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-white transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(34,211,238,0.65)] active:scale-95 whitespace-nowrap text-sm md:text-base border border-cyan-400/20"
                                 style={{ background: "linear-gradient(135deg, #06b6d4, #2563eb)" }}>
-                                Know More
-                                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }} />
+                                <span className="relative z-10 flex items-center gap-2">
+                                    Know More
+                                    <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
+                                </span>
                             </button>
                         </MagneticButton>
                     </div>
@@ -295,10 +363,10 @@ export default function Hero() {
                     <div className="flex justify-end">
                         <MagneticButton strength={30}>
                             <a href="https://www.linkedin.com/in/mohammed-anas-30110b35b" target="_blank" rel="noopener noreferrer"
-                                className="group relative flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_35px_rgba(34,211,238,0.55)] border border-cyan-500/60 hover:border-cyan-400 active:scale-95 whitespace-nowrap text-sm md:text-base">
-                                <div className="absolute inset-0 bg-cyan-500 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-300 ease-out" />
-                                <span className="relative z-10 flex items-center gap-2 text-cyan-400 group-hover:text-black transition-colors duration-200">
-                                    LinkedIn <Linkedin className="w-4 h-4 md:w-5 md:h-5" />
+                                className="group relative flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_35px_rgba(34,211,238,0.55)] border border-cyan-500/60 hover:border-cyan-300 active:scale-95 whitespace-nowrap text-sm md:text-base bg-white/5 backdrop-blur-sm">
+                                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                                <span className="relative z-10 flex items-center gap-2 text-cyan-300 group-hover:text-white transition-colors duration-300">
+                                    LinkedIn <Linkedin className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:scale-110" />
                                 </span>
                             </a>
                         </MagneticButton>
@@ -307,12 +375,14 @@ export default function Hero() {
             </motion.div>
 
             {/* Scroll indicator */}
-            <motion.div style={{ opacity: scrollOpacity }} className="absolute bottom-5 left-1/2 -translate-x-1/2 z-40 pointer-events-none hidden md:block">
-                <motion.div animate={{ y: [0, 10, 0] }} transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                    className="w-px h-12 mx-auto" style={{ background: "linear-gradient(to bottom, #06b6d4, transparent)" }} />
+            <motion.div style={{ opacity: scrollOpacity }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-none hidden md:flex flex-col items-center gap-3">
+                <span className="text-[9px] font-mono tracking-[0.3em] text-cyan-400/40 uppercase">Scroll</span>
+                <div className="w-[1px] h-16 relative overflow-hidden bg-white/5">
+                    <motion.div animate={{ y: ['-100%', '200%'] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        className="w-full h-1/2 absolute top-0 left-0" style={{ background: "linear-gradient(to bottom, transparent, #06b6d4, transparent)" }} />
+                </div>
             </motion.div>
 
-            {/* Stat Counters Overlay */}
             <div className="absolute top-24 right-4 md:right-10 z-[40] flex flex-col gap-3 pointer-events-none">
                 {[
                     { end: 170, suffix: "+", label: "Clients" },

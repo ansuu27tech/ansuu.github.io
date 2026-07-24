@@ -100,7 +100,7 @@ export default function Contact() {
                                         required
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-400"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -113,7 +113,7 @@ export default function Contact() {
                                         required
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-400"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
                                         placeholder="+1 (234) 567-8900"
                                     />
                                 </div>
@@ -129,7 +129,7 @@ export default function Contact() {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-400"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -141,8 +141,7 @@ export default function Contact() {
                                         required
                                         value={formData.projectType}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white text-white rounded-xl px-5 py-4 outline-none transition-all appearance-none cursor-pointer placeholder:text-gray-400"
-                                        style={{ backgroundColor: 'transparent' }}
+                                        className="w-full bg-[#111] border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all appearance-none cursor-pointer placeholder:text-gray-500 [&>option]:bg-[#1a1a1a] [&>option]:text-white"
                                     >
                                         <option value="Website Design">Website Design</option>
                                         <option value="Website Development">Website Development</option>
@@ -289,6 +288,22 @@ export default function Contact() {
                                 <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">@ansuu27tech</p>
                             </div>
                         </a>
+
+                        {/* Pixelmint Studio Website */}
+                        <a
+                            href="https://pixelmint-studio-delta.vercel.app"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group p-6 md:p-8 rounded-2xl border border-lime-400/20 bg-lime-400/5 hover:bg-lime-400/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-lime-400/40 hover:shadow-[0_0_25px_rgba(163,230,53,0.15)] overflow-hidden"
+                        >
+                            <div className="w-12 h-12 rounded-full bg-lime-400/10 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(163,230,53,0.4)] transition-all text-lime-400">
+                                <ArrowUpRight className="w-6 h-6" />
+                            </div>
+                            <div className="w-full">
+                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">Studio</h3>
+                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-lime-400 transition-colors break-words [word-break:break-word]">Pixelmint Studio</p>
+                            </div>
+                        </a>
                     </div>
                 </div>
 
@@ -369,7 +384,16 @@ export default function Contact() {
             </div>
 
             <div className="text-center py-6 text-xs text-gray-600 border-t border-white/5">
-                © {new Date().getFullYear()} Pixelmint Studio. All Rights Reserved.
+                © {new Date().getFullYear()}{" "}
+                <a
+                    href="https://pixelmint-studio-delta.vercel.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-lime-400/60 hover:text-lime-400 transition-colors duration-300"
+                >
+                    Pixelmint Studio
+                </a>
+                . All Rights Reserved.
             </div>
         </footer>
     );

@@ -6,6 +6,21 @@ import SectionWrapper from "../ui/SectionWrapper";
 
 const experiences = [
   {
+    role: "Founder & Creative Director",
+    company: "Pixelmint Studio",
+    period: "2024 – Present",
+    description:
+      "Founded and scaled Pixelmint Studio — a premium creative digital agency specializing in web design, development, branding, and growth solutions. Leading a team of designers, developers, and strategists to deliver exceptional digital experiences for clients across 25+ countries.",
+    badge: "STUDIO FOUNDER",
+  },
+  {
+    role: "Digital Marketing Strategist",
+    company: "Draughtman Studio",
+    period: "2026 - Present",
+    description:
+      "Working as a Digital Marketing Strategist at Draughtman Studio, focusing on social media growth, performance marketing, brand positioning, and data-driven campaign strategies. Managing content planning, audience targeting, and analytics to increase engagement, leads, and overall digital presence.",
+  },
+  {
     role: "Freelance Developer",
     company: "Self-Employed",
     period: "2023 - Present",
@@ -18,13 +33,6 @@ const experiences = [
     period: "2024",
     description:
       "Authoring digital content focused on skill-based learning and tech education. Creating resources that simplify complex concepts for aspiring developers.",
-  },
-  {
-    role: "Digital Marketing Strategist",
-    company: "Draughtman Studio",
-    period: "2026 - Present",
-    description:
-      "Working as a Digital Marketing Strategist at Draughtman Studio, focusing on social media growth, performance marketing, brand positioning, and data-driven campaign strategies. Managing content planning, audience targeting, and analytics to increase engagement, leads, and overall digital presence.",
   },
 ];
 
@@ -83,12 +91,21 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6, delay: index * 0.2 }}
+      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
       className={`relative flex flex-col md:flex-row gap-8 ${isEven ? "md:flex-row-reverse" : ""}`}
     >
       {/* Timeline Dot */}
       <div className="absolute left-0 w-10 h-10 flex items-center justify-center md:left-1/2 md:-translate-x-1/2">
-        <div className="w-4 h-4 rounded-full bg-brand-mint border-4 border-white shadow-[0_0_0_4px_rgba(0,0,0,0.05)]" />
+        <div
+          className="w-4 h-4 rounded-full border-4 shadow-[0_0_0_4px_rgba(0,0,0,0.05)]"
+          style={{
+            background: data.badge ? "#a3e635" : "var(--color-brand-mint)",
+            borderColor: "white",
+            boxShadow: data.badge
+              ? "0 0 0 4px rgba(0,0,0,0.05), 0 0 12px rgba(163,230,53,0.5)"
+              : "0 0 0 4px rgba(0,0,0,0.05)",
+          }}
+        />
       </div>
 
       {/* Content Card */}
@@ -96,7 +113,11 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
-          className={`group relative p-6 glass-panel rounded-xl bg-transparent border border-white/5 overflow-hidden ${isEven ? "md:text-right" : "md:text-left"}`}
+          className={`group relative p-6 glass-panel rounded-xl bg-transparent border overflow-hidden ${isEven ? "md:text-right" : "md:text-left"}`}
+          style={{
+            borderColor: data.badge ? "rgba(163,230,53,0.15)" : "rgba(255,255,255,0.05)",
+            boxShadow: data.badge ? "0 0 25px rgba(163,230,53,0.08)" : undefined,
+          }}
         >
           <motion.div
             className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
@@ -104,13 +125,20 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
               background: useTransform(
                 [mouseX, mouseY],
                 ([x, y]) =>
-                  `radial-gradient(600px circle at ${x}px ${y}px, rgba(75, 255, 255, 0.1), transparent 40%)`,
+                  `radial-gradient(600px circle at ${x}px ${y}px, ${data.badge ? "rgba(163,230,53,0.1)" : "rgba(75, 255, 255, 0.1)"}, transparent 40%)`,
               ),
             }}
           />
-          <span className="relative z-10 inline-block px-3 py-1 text-xs font-medium text-brand-mint bg-brand-mint/10 rounded-full mb-3">
-            {data.period}
-          </span>
+          <div className={`relative z-10 flex items-center gap-2 mb-3 flex-wrap ${isEven ? "md:justify-end" : ""}`}>
+            <span className="inline-block px-3 py-1 text-xs font-medium text-brand-mint bg-brand-mint/10 rounded-full">
+              {data.period}
+            </span>
+            {data.badge && (
+              <span className="inline-block px-3 py-1 text-[10px] font-bold text-lime-400 bg-lime-400/10 border border-lime-400/25 rounded-full tracking-wider">
+                {data.badge}
+              </span>
+            )}
+          </div>
           <h3 className="relative z-10 text-xl font-bold text-white mb-1">
             {data.role}
           </h3>

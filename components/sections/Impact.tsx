@@ -34,7 +34,7 @@ export default function Impact() {
     return (
         <section id="results" ref={sectionRef} className="relative w-full py-24 md:py-40 bg-transparent overflow-hidden">
             <div className="max-w-7xl mx-auto px-6 relative z-10 w-full flex flex-col md:flex-row gap-16 md:gap-24 items-center">
-                
+
                 {/* Left Side: Sticky Title */}
                 <div className="w-full md:w-1/3 flex flex-col items-start md:sticky md:top-40 md:self-start">
                     <motion.div
@@ -49,8 +49,8 @@ export default function Impact() {
                             Results Over <br /> Visuals.
                         </h2>
                         <p className="text-gray-400 text-lg leading-relaxed">
-                          Building brands that don&apos;t just exist, but lead. 
-I build digital assets specifically designed to maximize trust, drive retention, and generate measurable conversions for your brand.
+                            Building brands that don&apos;t just exist, but lead.
+                            I build digital assets specifically designed to maximize trust, drive retention, and generate measurable conversions for your brand.
                         </p>
                     </motion.div>
                 </div>

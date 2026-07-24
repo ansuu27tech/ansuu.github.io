@@ -108,6 +108,33 @@ function Social({ href, Icon, color }: { href: string; Icon: any; color: string 
   );
 }
 
+function HoverParticles({ count, color, active }: { count: number; color: string; active: boolean }) {
+  if (!active) return null;
+  return (
+    <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 1 }}>
+      {Array.from({ length: count }).map((_, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 10, x: (Math.random() - 0.5) * 40 }}
+          animate={{ opacity: [0, 0.8, 0], y: -30 - Math.random() * 50, x: (Math.random() - 0.5) * 60 }}
+          transition={{ duration: 1.5 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2, ease: "easeOut" }}
+          style={{
+            position: "absolute",
+            bottom: "10%",
+            left: `${10 + Math.random() * 80}%`,
+            width: 2 + Math.random() * 3,
+            height: 2 + Math.random() * 3,
+            borderRadius: "50%",
+            background: color,
+            boxShadow: `0 0 10px ${color}`,
+            willChange: "transform, opacity"
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 function MarqueeStrip({ reverse = false }: { reverse?: boolean }) {
   const d = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
   return (
@@ -142,8 +169,8 @@ function FounderCard({ member }: { member: typeof TEAM[0] }) {
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 44, scale: 0.95 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      animate={inView ? { opacity: 1, y: hov ? -12 : 0, scale: 1 } : {}}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], y: { duration: 0.4 } }}
       style={{ perspective: 1000, gridColumn: "span 2" }}
       onMouseMove={(e) => { onMove(e); trackSpot(e); }}
       onMouseLeave={() => { onReset(); setHov(false); }}
@@ -154,13 +181,27 @@ function FounderCard({ member }: { member: typeof TEAM[0] }) {
           rotateX, rotateY, transformStyle: "preserve-3d",
           borderRadius: 24, overflow: "hidden", position: "relative",
           minHeight: 380,
-          border: `1px solid ${hov ? member.borderCol : "rgba(255,255,255,0.06)"}`,
-          boxShadow: hov ? `0 0 0 1px ${member.borderCol}, 0 0 80px ${member.glow}, 0 40px 100px rgba(0,0,0,0.65)` : "0 16px 60px rgba(0,0,0,0.5)",
-          background: "rgba(5,9,5,0.94)",
-          backdropFilter: "blur(20px)",
-          transition: "border-color 0.4s, box-shadow 0.4s",
+          background: hov ? "rgba(8,14,8,0.97)" : "rgba(5,9,5,0.94)",
+          backdropFilter: "blur(28px)",
+          transition: "box-shadow 0.5s, background 0.5s",
+          boxShadow: hov
+            ? `0 0 0 1.5px ${member.accent}90, 0 0 60px ${member.glow}, 0 0 120px ${member.glow}, 0 40px 100px rgba(0,0,0,0.7)`
+            : "0 1px 0 1px rgba(255,255,255,0.06), 0 16px 60px rgba(0,0,0,0.5)",
         }}
       >
+        {/* Animated gradient border */}
+        <div style={{
+          position: "absolute", inset: -1, borderRadius: 25, zIndex: 0, padding: 1,
+          background: hov
+            ? `conic-gradient(from var(--gradient-angle, 0deg), ${member.accent}, ${member.accentTo}, transparent, ${member.accent})`
+            : `linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))`,
+          transition: "background 0.6s",
+          animation: hov ? `gradient-border-spin 3s linear infinite` : "none",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          pointerEvents: "none",
+        }} />
         {/* Spotlight overlay */}
         <div style={{
           position: "absolute", inset: 0, borderRadius: 24, zIndex: 5,
@@ -176,6 +217,8 @@ function FounderCard({ member }: { member: typeof TEAM[0] }) {
           backgroundSize: "38px 38px",
         }} />
 
+        <HoverParticles count={15} color={member.accent} active={hov} />
+
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1.15fr", height: "100%", position: "relative", zIndex: 10 }}>
           {/* LEFT — photo */}
           <div style={{ position: "relative", overflow: "hidden", minHeight: 340 }}>
@@ -187,8 +230,9 @@ function FounderCard({ member }: { member: typeof TEAM[0] }) {
             {member.image ? (
               <Image src={member.image} alt={member.name} fill
                 className="object-cover object-[center_top]"
-                style={{ filter: hov ? "grayscale(0%) brightness(0.92)" : "grayscale(60%) brightness(0.65)", transition: "filter 0.7s ease" }}
-                priority sizes="34vw" />
+                sizes="(max-width: 768px) 100vw, 34vw"
+                priority
+                style={{ transform: hov ? "scale(1.05)" : "scale(1)", filter: hov ? "grayscale(0%) brightness(0.92)" : "grayscale(60%) brightness(0.65)", transition: "transform 0.7s ease, filter 0.7s ease" }} />
             ) : (
               <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: `${member.accent}0a`, color: `${member.accent}18`, fontSize: 100, fontWeight: 900 }}>
                 {member.firstName[0]}
@@ -312,8 +356,8 @@ function MemberCard({ member, delay }: { member: typeof TEAM[0]; delay: number }
     <motion.div
       ref={ref}
       initial={{ opacity: 0, y: 44, scale: 0.94 }}
-      animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] }}
+      animate={inView ? { opacity: 1, y: hov ? -10 : 0, scale: 1 } : {}}
+      transition={{ duration: 0.75, delay: hov ? 0 : delay, ease: [0.22, 1, 0.36, 1], y: { duration: 0.4 } }}
       style={{ perspective: 900 }}
       onMouseMove={(e) => { onMove(e); trackSpot(e); }}
       onMouseLeave={() => { onReset(); setHov(false); }}
@@ -324,13 +368,27 @@ function MemberCard({ member, delay }: { member: typeof TEAM[0]; delay: number }
           rotateX, rotateY, transformStyle: "preserve-3d",
           borderRadius: 20, overflow: "hidden",
           position: "relative", display: "flex", flexDirection: "column",
-          border: `1px solid ${hov ? member.borderCol : "rgba(255,255,255,0.06)"}`,
-          boxShadow: hov ? `0 0 60px ${member.glow}, 0 30px 80px rgba(0,0,0,0.55)` : "0 12px 40px rgba(0,0,0,0.4)",
-          background: "rgba(5,9,5,0.9)",
-          backdropFilter: "blur(18px)",
-          transition: "border-color 0.4s, box-shadow 0.4s",
+          background: hov ? "rgba(8,14,8,0.97)" : "rgba(5,9,5,0.92)",
+          backdropFilter: "blur(28px)",
+          transition: "box-shadow 0.5s, background 0.5s",
+          boxShadow: hov
+            ? `0 0 0 1.5px ${member.accent}90, 0 0 40px ${member.glow}, 0 0 80px ${member.glow}, 0 30px 80px rgba(0,0,0,0.6)`
+            : "0 1px 0 1px rgba(255,255,255,0.06), 0 12px 40px rgba(0,0,0,0.4)",
         }}
       >
+        {/* Animated gradient border */}
+        <div style={{
+          position: "absolute", inset: -1, borderRadius: 21, zIndex: 0, padding: 1,
+          background: hov
+            ? `conic-gradient(from var(--gradient-angle, 0deg), ${member.accent}, ${member.accentTo}, transparent, ${member.accent})`
+            : `linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02))`,
+          transition: "background 0.6s",
+          animation: hov ? `gradient-border-spin 3s linear infinite` : "none",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          pointerEvents: "none",
+        }} />
         {/* Top accent line */}
         <motion.div
           style={{ height: 2, background: `linear-gradient(90deg,${member.accent},${member.accentTo})`, transformOrigin: "left" }}
@@ -349,6 +407,8 @@ function MemberCard({ member, delay }: { member: typeof TEAM[0]; delay: number }
           backgroundImage: "linear-gradient(rgba(255,255,255,0.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.6) 1px,transparent 1px)",
           backgroundSize: "30px 30px",
         }} />
+        
+        <HoverParticles count={10} color={member.accent} active={hov} />
 
         {/* Ghost index */}
         <div style={{ position: "absolute", top: 6, right: 12, fontSize: 52, fontWeight: 900, opacity: 0.05, color: member.accent, pointerEvents: "none", userSelect: "none", fontFamily: "var(--font-syne)", lineHeight: 1 }}>{member.index}</div>
@@ -366,8 +426,8 @@ function MemberCard({ member, delay }: { member: typeof TEAM[0]; delay: number }
                 {member.image ? (
                   <Image src={member.image} alt={member.name} fill
                     className="object-cover object-top"
-                    style={{ filter: hov ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.55)", transition: "filter 0.65s ease" }}
-                    sizes="76px" />
+                    sizes="76px"
+                    style={{ transform: hov ? "scale(1.08)" : "scale(1)", filter: hov ? "grayscale(0%) brightness(1)" : "grayscale(100%) brightness(0.55)", transition: "transform 0.65s ease, filter 0.65s ease" }}/>
                 ) : (
                   <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: `${member.accent}12`, color: member.accent, fontSize: 22, fontWeight: 900, fontFamily: "var(--font-syne)" }}>
                     {member.name.split(" ").map((w: string) => w[0]).join("").slice(0, 2)}
