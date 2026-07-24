@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState, useCallback } from "react";
 import SectionWrapper from "../ui/SectionWrapper";
+import PixelTransition from "../ui/PixelTransition";
 
 import { SiPython, SiHtml5, SiCss, SiJavascript, SiReact, SiFigma } from "react-icons/si";
 import { FaBrain, FaRobot, FaPalette, FaLayerGroup, FaVideo, FaInstagram, FaProjectDiagram, FaTools, FaCrown, FaInfinity } from "react-icons/fa";
@@ -78,13 +79,36 @@ export default function About() {
                         transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <div className="absolute inset-0 bg-brand-mint/20 -translate-x-4 translate-y-4 rounded-xl" />
-                        <Image
-                            src="/mohammed anas founder.jpeg"
-                            alt="Anas - Pixelmint Studio"
-                            fill
-                            priority
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                            className="object-cover rounded-xl filter grayscale contrast-125 hover:grayscale-0 transition-all duration-700"
+                        <PixelTransition
+                            firstContent={
+                                <Image
+                                    src="/mohammed anas founder.jpeg"
+                                    alt="Anas - Pixelmint Studio"
+                                    fill
+                                    priority
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    className="object-cover object-top rounded-xl"
+                                />
+                            }
+                            secondContent={
+                                <div className="w-full h-full bg-[#050505] flex flex-col items-center justify-center rounded-xl border border-white/10 relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-brand-mint/10 opacity-100 blur-3xl rounded-full scale-150 transition-all duration-700" />
+                                    <div className="relative z-10 flex flex-col items-center gap-3">
+                                        <div className="p-4 rounded-full bg-white/5 border border-white/10 shadow-[0_0_15px_rgba(52,211,153,0.2)]">
+                                            <FaPalette className="text-3xl text-brand-mint" />
+                                        </div>
+                                        <span className="text-2xl sm:text-3xl font-heading font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-mint to-cyan-400 tracking-wider text-center px-4">
+                                            Cooking Pixels
+                                        </span>
+                                        <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-gray-400 mt-1">Design & Code</span>
+                                    </div>
+                                    <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none opacity-40" />
+                                </div>
+                            }
+                            gridSize={12}
+                            pixelColor="#ffffff"
+                            animationStepDuration={0.4}
+                            className="absolute inset-0 rounded-xl"
                         />
                     </motion.div>
 

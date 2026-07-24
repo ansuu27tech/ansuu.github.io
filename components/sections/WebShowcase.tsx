@@ -33,6 +33,19 @@ const projects: Project[] = [
             tech: ["Next.js", "Tailwind CSS", "Framer Motion", "Vercel"],
         },
     },
+    {
+        id: "ss-builders",
+        name: "SS Builders",
+        tagline: "Construction & Builders Website",
+        url: "https://ss-builders-mvs.vercel.app/",
+        preview: "/ss-builders.jpeg",
+        tags: ["Java", "HTML", "CSS", "JavaScript"],
+        details: {
+            description:
+                "A professional web presence for SS Builders, showcasing construction projects, services, and industry expertise with a modern interface.",
+            tech: ["Java", "HTML5", "CSS3", "JavaScript"],
+        },
+    },
 ];
 
 export default function WebShowcase() {
