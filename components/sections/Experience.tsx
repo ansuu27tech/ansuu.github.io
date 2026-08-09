@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform, useMotionValue } from "framer-motion";
+import { motion, useScroll, useTransform, useMotionValue, useInView } from "framer-motion";
 import { useRef } from "react";
 import SectionWrapper from "../ui/SectionWrapper";
 
@@ -60,8 +60,19 @@ export default function Experience() {
         </motion.div>
 
         <div className="relative max-w-3xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-[19px] top-0 bottom-0 w-[1px] bg-white/10 md:left-1/2 md:-translate-x-1/2" />
+          {/* Vertical Line — scroll-driven draw */}
+          <motion.div
+            className="absolute left-[19px] top-0 bottom-0 w-[1px] md:left-1/2 md:-translate-x-1/2 origin-top"
+            style={{
+              scaleY: useTransform(
+                useScroll({ target: containerRef, offset: ["start end", "end start"] }).scrollYProgress,
+                [0, 0.8],
+                [0, 1]
+              ),
+              background: "linear-gradient(to bottom, rgba(34,211,238,0.4), rgba(152,255,152,0.3), rgba(34,211,238,0.1))",
+              boxShadow: "0 0 8px rgba(34,211,238,0.15)",
+            }}
+          />
 
           <div className="space-y-12">
             {experiences.map((exp, index) => (
@@ -94,17 +105,27 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
       transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
       className={`relative flex flex-col md:flex-row gap-8 ${isEven ? "md:flex-row-reverse" : ""}`}
     >
-      {/* Timeline Dot */}
+      {/* Timeline Dot — pulsing glow */}
       <div className="absolute left-0 w-10 h-10 flex items-center justify-center md:left-1/2 md:-translate-x-1/2">
-        <div
-          className="w-4 h-4 rounded-full border-4 shadow-[0_0_0_4px_rgba(0,0,0,0.05)]"
+        <motion.div
+          className="w-4 h-4 rounded-full border-4"
           style={{
             background: data.badge ? "#a3e635" : "var(--color-brand-mint)",
             borderColor: "white",
-            boxShadow: data.badge
-              ? "0 0 0 4px rgba(0,0,0,0.05), 0 0 12px rgba(163,230,53,0.5)"
-              : "0 0 0 4px rgba(0,0,0,0.05)",
           }}
+          initial={{ scale: 0 }}
+          whileInView={{ scale: 1 }}
+          viewport={{ once: true, margin: "-30px" }}
+          transition={{ duration: 0.5, delay: index * 0.15, type: "spring", stiffness: 300 }}
+        />
+        {/* Pulsing ring */}
+        <motion.div
+          className="absolute w-4 h-4 rounded-full"
+          style={{ background: data.badge ? "rgba(163,230,53,0.3)" : "rgba(152,255,152,0.3)" }}
+          initial={{ scale: 1, opacity: 0 }}
+          whileInView={{ scale: [1, 2.5], opacity: [0.5, 0] }}
+          viewport={{ once: true, margin: "-30px" }}
+          transition={{ duration: 1.5, delay: index * 0.15 + 0.3, repeat: 0 }}
         />
       </div>
 
@@ -130,13 +151,25 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
             }}
           />
           <div className={`relative z-10 flex items-center gap-2 mb-3 flex-wrap ${isEven ? "md:justify-end" : ""}`}>
-            <span className="inline-block px-3 py-1 text-xs font-medium text-brand-mint bg-brand-mint/10 rounded-full">
+            <motion.span
+              className="inline-block px-3 py-1 text-xs font-medium text-brand-mint bg-brand-mint/10 rounded-full"
+              initial={{ opacity: 0, scale: 0.5 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.15 + 0.2, type: "spring", stiffness: 400 }}
+            >
               {data.period}
-            </span>
+            </motion.span>
             {data.badge && (
-              <span className="inline-block px-3 py-1 text-[10px] font-bold text-lime-400 bg-lime-400/10 border border-lime-400/25 rounded-full tracking-wider">
+              <motion.span
+                className="inline-block px-3 py-1 text-[10px] font-bold text-lime-400 bg-lime-400/10 border border-lime-400/25 rounded-full tracking-wider"
+                initial={{ opacity: 0, x: -10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.15 + 0.4 }}
+              >
                 {data.badge}
-              </span>
+              </motion.span>
             )}
           </div>
           <h3 className="relative z-10 text-xl font-bold text-white mb-1">

@@ -83,6 +83,7 @@ const StatCounter = ({ end, suffix, label, delayIndex }: { end: number; suffix: 
             transition={{ duration: 0.8, delay: delayIndex * 0.2, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col items-end text-right glass-panel px-5 py-3 rounded-xl border border-white/5 hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden group min-w-[130px]"
             style={{ willChange: "transform, opacity" }}
+            whileHover={{ scale: 1.05, y: -2 }}
         >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none" />
             <div className="font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-brand-mint to-cyan-400 drop-shadow-[0_0_12px_rgba(152,255,152,0.4)] flex items-center justify-end" style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}>
@@ -305,14 +306,35 @@ export default function Hero() {
             <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-[130px] bg-gradient-to-b from-[#030305]/80 to-transparent" />
 
             <nav className="absolute top-0 left-0 w-full px-8 py-6 z-40 flex items-center gap-5">
-                <button onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                <motion.button
+                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                >
                     <Logo className="w-14 h-14 md:w-16 md:h-16 rounded-full shadow-[0_0_25px_rgba(34,211,238,0.4)] hover:scale-105 transition-transform origin-center" />
-                </button>
+                </motion.button>
                 <div className="flex flex-col select-none cursor-default pb-1">
-                    <span className="text-white font-bold leading-none tracking-wide text-2xl md:text-3xl" style={{ fontFamily: "var(--font-orbitron)" }}>
-                        <span className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(34,211,238,0.6)]">PIXELMINT</span>
+                    <span className="text-white font-bold leading-none tracking-wide text-2xl md:text-3xl flex" style={{ fontFamily: "var(--font-orbitron)" }}>
+                        {"PIXELMINT".split("").map((letter, i) => (
+                            <motion.span
+                                key={i}
+                                className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(34,211,238,0.6)] inline-block"
+                                initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                transition={{ duration: 0.5, delay: 0.3 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+                            >
+                                {letter}
+                            </motion.span>
+                        ))}
                     </span>
-                    <span className="text-gray-300 text-[0.7rem] md:text-sm tracking-[0.6em] mt-1 uppercase" style={{ fontFamily: "var(--font-exo2)" }}>STUDIO</span>
+                    <motion.span
+                        className="text-gray-300 text-[0.7rem] md:text-sm tracking-[0.6em] mt-1 uppercase"
+                        style={{ fontFamily: "var(--font-exo2)" }}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                    >STUDIO</motion.span>
                 </div>
 
                 <motion.a
@@ -349,8 +371,8 @@ export default function Hero() {
                     <div className="flex justify-start">
                         <MagneticButton strength={30}>
                             <button onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-                                className="group relative overflow-hidden flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-white transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(34,211,238,0.65)] active:scale-95 whitespace-nowrap text-sm md:text-base border border-cyan-400/20"
-                                style={{ background: "linear-gradient(135deg, #06b6d4, #2563eb)" }}>
+                                className="group relative overflow-hidden flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-white transition-all duration-500 hover:scale-105 active:scale-95 whitespace-nowrap text-sm md:text-base border border-cyan-400/20"
+                                style={{ background: "linear-gradient(135deg, #06b6d4, #2563eb)", animation: "glow-pulse 3s ease-in-out infinite" }}>
                                 <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }} />
                                 <span className="relative z-10 flex items-center gap-2">
                                     Know More
@@ -374,13 +396,22 @@ export default function Hero() {
                 </div>
             </motion.div>
 
-            {/* Scroll indicator */}
+            {/* Scroll indicator — premium pulsing dot + breathing text */}
             <motion.div style={{ opacity: scrollOpacity }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-none hidden md:flex flex-col items-center gap-3">
-                <span className="text-[9px] font-mono tracking-[0.3em] text-cyan-400/40 uppercase">Scroll</span>
+                <motion.span
+                    className="text-[9px] font-mono tracking-[0.3em] text-cyan-400/40 uppercase"
+                    animate={{ opacity: [0.3, 0.7, 0.3] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >Scroll</motion.span>
                 <div className="w-[1px] h-16 relative overflow-hidden bg-white/5">
                     <motion.div animate={{ y: ['-100%', '200%'] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                         className="w-full h-1/2 absolute top-0 left-0" style={{ background: "linear-gradient(to bottom, transparent, #06b6d4, transparent)" }} />
                 </div>
+                <motion.div
+                    className="w-2 h-2 rounded-full bg-cyan-400"
+                    animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0.8, 0.4], boxShadow: ["0 0 0 0 rgba(34,211,238,0)", "0 0 0 8px rgba(34,211,238,0.15)", "0 0 0 0 rgba(34,211,238,0)"] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
             </motion.div>
 
             <div className="absolute top-24 right-4 md:right-10 z-[40] flex flex-col gap-3 pointer-events-none">

@@ -88,6 +88,9 @@ export default function Contact() {
                         transition={{ delay: 0.2 }}
                         className="w-full max-w-2xl mx-auto mb-20 p-8 md:p-12 rounded-3xl bg-[#0d0d0d] border border-white/10 shadow-2xl relative overflow-hidden text-left"
                     >
+                        {/* Subtle background glow */}
+                        <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand-mint/5 rounded-full blur-[80px] pointer-events-none" />
+                        <div className="absolute -bottom-16 -left-16 w-32 h-32 bg-cyan-500/5 rounded-full blur-[60px] pointer-events-none" />
                         <h3 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">Get in Touch</h3>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,7 +103,7 @@ export default function Contact() {
                                         required
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_20px_rgba(152,255,152,0.2),inset_0_0_10px_rgba(152,255,152,0.05)] text-white rounded-xl px-5 py-4 outline-none transition-all duration-500 placeholder:text-gray-500"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -113,7 +116,7 @@ export default function Contact() {
                                         required
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_20px_rgba(152,255,152,0.2),inset_0_0_10px_rgba(152,255,152,0.05)] text-white rounded-xl px-5 py-4 outline-none transition-all duration-500 placeholder:text-gray-500"
                                         placeholder="+1 (234) 567-8900"
                                     />
                                 </div>
@@ -129,7 +132,7 @@ export default function Contact() {
                                         required
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all placeholder:text-gray-500"
+                                        className="w-full bg-transparent border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_20px_rgba(152,255,152,0.2),inset_0_0_10px_rgba(152,255,152,0.05)] text-white rounded-xl px-5 py-4 outline-none transition-all duration-500 placeholder:text-gray-500"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -141,7 +144,7 @@ export default function Contact() {
                                         required
                                         value={formData.projectType}
                                         onChange={handleChange}
-                                        className="w-full bg-[#111] border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_15px_rgba(152,255,152,0.15)] text-white rounded-xl px-5 py-4 outline-none transition-all appearance-none cursor-pointer placeholder:text-gray-500 [&>option]:bg-[#1a1a1a] [&>option]:text-white"
+                                        className="w-full bg-[#111] border border-white/10 focus:border-brand-mint focus:bg-white/5 focus:shadow-[0_0_20px_rgba(152,255,152,0.2),inset_0_0_10px_rgba(152,255,152,0.05)] text-white rounded-xl px-5 py-4 outline-none transition-all duration-500 appearance-none cursor-pointer placeholder:text-gray-500 [&>option]:bg-[#1a1a1a] [&>option]:text-white"
                                     >
                                         <option value="Website Design">Website Design</option>
                                         <option value="Website Development">Website Development</option>
@@ -170,7 +173,10 @@ export default function Contact() {
                                             exit={{ opacity: 0, y: -20 }}
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="group w-full md:w-auto px-12 py-4 rounded-full bg-brand-mint text-black font-bold text-lg hover:scale-105 hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer relative overflow-hidden absolute"
+                                            whileHover={{ scale: 1.05 }}
+                                            whileTap={{ scale: 0.97 }}
+                                            className="group w-full md:w-auto px-12 py-4 rounded-full bg-brand-mint text-black font-bold text-lg disabled:opacity-70 disabled:hover:scale-100 disabled:cursor-not-allowed transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer relative overflow-hidden absolute"
+                                            style={{ boxShadow: "0 0 20px rgba(152,255,152,0.2)" }}
                                         >
                                             <span className={isSubmitting ? "opacity-0" : "opacity-100 transition-opacity"}>Submit Request</span>
                                             <ArrowUpRight className={`w-5 h-5 transition-transform ${isSubmitting ? "opacity-0" : "group-hover:translate-x-1 group-hover:-translate-y-1"}`} />
@@ -212,98 +218,44 @@ export default function Contact() {
                         </form>
                     </motion.div>
 
-
-
                     <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-4 md:gap-6 pt-12 w-full">
+                        {/* Social Link Card */}
+                        {[
+                            { href: "https://instagram.com/ansuu__._", icon: Instagram, label: "Personal", handle: "@ansuu__._", accent: false },
+                            { href: "https://instagram.com/_pixelmint_studio", icon: Instagram, label: "Studio", handle: "@_pixelmint_studio", accent: false },
+                            { href: "mailto:mohdanas53n@gmail.com", icon: Mail, label: "Email", handle: "mohdanas53n@gmail.com", accent: false },
+                            { href: "https://x.com/anas_moham80856", icon: Twitter, label: "X Profile", handle: "@anas_moham80856", accent: false },
+                            { href: "https://github.com/ansuu27tech/ansuu.github.io", icon: Github, label: "GitHub", handle: "@ansuu27tech", accent: false },
+                            { href: "https://pixelmint-studio-delta.vercel.app", icon: ArrowUpRight, label: "Studio", handle: "Pixelmint Studio", accent: true },
+                        ].map((link, idx) => (
+                            <motion.a
+                                key={idx}
+                                href={link.href}
+                                target={link.href.startsWith("mailto") ? undefined : "_blank"}
+                                rel="noopener noreferrer"
+                                initial={{ opacity: 0, y: 30 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                                whileHover={{ y: -4, borderColor: link.accent ? "rgba(163,230,53,0.4)" : "rgba(152,255,152,0.3)" }}
+                                className={`group p-6 md:p-8 rounded-2xl border ${
+                                    link.accent
+                                        ? "border-lime-400/20 bg-lime-400/5 hover:bg-lime-400/10 hover:shadow-[0_0_25px_rgba(163,230,53,0.15)]"
+                                        : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-brand-mint/30"
+                                } transition-all duration-300 flex flex-col items-center justify-center gap-4 text-center overflow-hidden relative`}
+                            >
+                                {/* Shimmer sweep */}
+                                <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12 pointer-events-none" style={{ background: "linear-gradient(90deg, transparent, rgba(152,255,152,0.06), transparent)" }} />
 
-                        {/* Personal Insta */}
-                        <a
-                            href="https://instagram.com/ansuu__._"
-                            target="_blank"
-                            className="group p-6 md:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-brand-mint/30 overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform text-brand-mint">
-                                <Instagram className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">Personal</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">@ansuu__._</p>
-                            </div>
-                        </a>
-
-                        {/* Studio Insta */}
-                        <a
-                            href="https://instagram.com/_pixelmint_studio"
-                            target="_blank"
-                            className="group p-6 md:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-brand-mint/30 overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform text-brand-mint">
-                                <Instagram className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">Studio</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">@_pixelmint_studio</p>
-                            </div>
-                        </a>
-
-                        {/* Email */}
-                        <a
-                            href="mailto:mohdanas53n@gmail.com"
-                            className="group p-6 md:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-brand-mint/30 overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 transition-transform text-brand-mint">
-                                <Mail className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">Email</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">mohdanas53n@gmail.com</p>
-                            </div>
-                        </a>
-                        {/* X / Twitter */}
-                        <a
-                            href="https://x.com/anas_moham80856"
-                            target="_blank"
-                            className="group p-6 md:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-brand-mint/30 overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(152,255,152,0.4)] transition-all text-brand-mint">
-                                <Twitter className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">X Profile</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">@anas_moham80856</p>
-                            </div>
-                        </a>
-
-                        {/* GitHub */}
-                        <a
-                            href="https://github.com/ansuu27tech/ansuu.github.io"
-                            target="_blank"
-                            className="group p-6 md:p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-brand-mint/30 overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(152,255,152,0.4)] transition-all text-brand-mint">
-                                <Github className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">GitHub</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-brand-mint transition-colors break-words [word-break:break-word]">@ansuu27tech</p>
-                            </div>
-                        </a>
-
-                        {/* Pixelmint Studio Website */}
-                        <a
-                            href="https://pixelmint-studio-delta.vercel.app"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group p-6 md:p-8 rounded-2xl border border-lime-400/20 bg-lime-400/5 hover:bg-lime-400/10 transition-all flex flex-col items-center justify-center gap-4 text-center hover:-translate-y-1 hover:border-lime-400/40 hover:shadow-[0_0_25px_rgba(163,230,53,0.15)] overflow-hidden"
-                        >
-                            <div className="w-12 h-12 rounded-full bg-lime-400/10 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(163,230,53,0.4)] transition-all text-lime-400">
-                                <ArrowUpRight className="w-6 h-6" />
-                            </div>
-                            <div className="w-full">
-                                <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">Studio</h3>
-                                <p className="text-sm md:text-base lg:text-lg font-medium text-white group-hover:text-lime-400 transition-colors break-words [word-break:break-word]">Pixelmint Studio</p>
-                            </div>
-                        </a>
+                                <div className={`w-12 h-12 rounded-full ${link.accent ? "bg-lime-400/10 text-lime-400" : "bg-white/5 text-brand-mint"} flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(152,255,152,0.3)] transition-all duration-300`}>
+                                    <link.icon className="w-6 h-6" />
+                                </div>
+                                <div className="w-full">
+                                    <h3 className="text-sm text-gray-400 uppercase tracking-wider mb-1 line-clamp-1">{link.label}</h3>
+                                    <p className={`text-sm md:text-base lg:text-lg font-medium text-white ${link.accent ? "group-hover:text-lime-400" : "group-hover:text-brand-mint"} transition-colors break-words [word-break:break-word]`}>{link.handle}</p>
+                                </div>
+                            </motion.a>
+                        ))}
                     </div>
                 </div>
 

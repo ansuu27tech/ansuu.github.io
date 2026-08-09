@@ -142,6 +142,60 @@
   50% { opacity: 0.5; transform: scale(0.7); }
 }
 
+/* ── Premium Micro-Interaction Keyframes ── */
+
+@keyframes text-reveal {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+@keyframes line-draw {
+  from { stroke-dashoffset: var(--line-length, 1000); }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 8px rgba(34,211,238,0.15), 0 0 20px rgba(34,211,238,0.08); }
+  50%       { box-shadow: 0 0 20px rgba(34,211,238,0.4), 0 0 50px rgba(34,211,238,0.15); }
+}
+
+@keyframes border-trace {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes text-shimmer-anim {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes ripple-out {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+@keyframes magnetic-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%      { transform: translateY(-3px) rotate(0.5deg); }
+  66%      { transform: translateY(2px) rotate(-0.3deg); }
+}
+
+@keyframes progress-ring {
+  from { stroke-dashoffset: var(--circumference, 113); }
+  to   { stroke-dashoffset: var(--progress-offset, 0); }
+}
+
+@keyframes divider-shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes dot-trail-fade {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.3); }
+}
+
 /* Utilities */
 .glass-panel {
   background: rgba(10, 10, 12, 0.4);
@@ -149,6 +203,67 @@
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ── Premium Glass Panel with animated border glow ── */
+.glass-panel-premium {
+  background: rgba(10, 10, 12, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: border-color 0.5s ease, box-shadow 0.5s ease;
+}
+.glass-panel-premium:hover {
+  border-color: rgba(34,211,238,0.25);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1), 0 0 25px rgba(34,211,238,0.08);
+}
+
+/* ── Text Shimmer — animated gradient text for headings ── */
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    #fff 0%,
+    #fff 40%,
+    rgba(34,211,238,0.9) 50%,
+    #fff 60%,
+    #fff 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-shimmer-anim 4s linear infinite;
+}
+
+/* ── Section Divider — animated gradient line between sections ── */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(34,211,238,0.05) 15%,
+    rgba(34,211,238,0.3) 50%,
+    rgba(34,211,238,0.05) 85%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: divider-shimmer 6s linear infinite;
+  position: relative;
+}
+.section-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(34,211,238,0.4);
+  box-shadow: 0 0 12px rgba(34,211,238,0.3);
 }
 
 .text-gradient {

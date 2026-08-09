@@ -53,9 +53,27 @@ export default function Mindset() {
                             initial={{ opacity: 0, y: 40 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.8, delay: idx * 0.15, ease: [0.22, 1, 0.36, 1] }}
-                            className="group relative flex flex-col p-8 md:p-10 rounded-[2rem] bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] hover:bg-white/[0.04] hover:border-brand-mint/30 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(34,211,238,0.1)]"
+                            whileHover={{ y: -8, transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] } }}
+                            className="group relative flex flex-col p-8 md:p-10 rounded-[2rem] bg-white/[0.02] backdrop-blur-xl border border-white/[0.05] hover:bg-white/[0.04] hover:border-cyan-400/30 transition-all duration-500 hover:shadow-[0_10px_40px_rgba(34,211,238,0.1)] overflow-hidden"
                         >
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-800 to-black/50 border border-gray-700/50 flex items-center justify-center mb-8 shadow-inner group-hover:border-cyan-500/50 transition-colors duration-500">
+                            {/* Border trace gradient on hover */}
+                            <div className="absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                                style={{
+                                    background: "linear-gradient(var(--gradient-angle, 0deg), transparent 40%, rgba(34,211,238,0.15) 50%, transparent 60%)",
+                                    backgroundSize: "300% 300%",
+                                    animation: "border-trace 4s ease infinite",
+                                }}
+                            />
+
+                            {/* Numbered label */}
+                            <span
+                                className="absolute top-6 right-6 text-[4rem] md:text-[5rem] font-black leading-none text-white/[0.03] select-none pointer-events-none group-hover:text-cyan-400/[0.06] transition-colors duration-700"
+                                style={{ fontFamily: "var(--font-orbitron)" }}
+                            >
+                                {String(idx + 1).padStart(2, "0")}
+                            </span>
+
+                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-gray-800 to-black/50 border border-gray-700/50 flex items-center justify-center mb-8 shadow-inner group-hover:border-cyan-500/50 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.15)] transition-all duration-500">
                                 <item.icon className="w-6 h-6 text-gray-400 group-hover:text-cyan-400 transition-colors" />
                             </div>
                             
@@ -67,8 +85,8 @@ export default function Mindset() {
                                 {item.text}
                             </p>
                             
-                            {/* Accent line */}
-                            <div className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-500/0 to-transparent group-hover:via-cyan-500/50 transition-all duration-700" />
+                            {/* Accent line — animated width on hover */}
+                            <div className="absolute bottom-0 left-0 w-0 group-hover:w-full h-[2px] bg-gradient-to-r from-cyan-500/60 via-cyan-400/40 to-transparent transition-all duration-700 ease-out" />
                         </motion.div>
                     ))}
                 </div>

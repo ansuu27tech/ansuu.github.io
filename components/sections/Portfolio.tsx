@@ -167,12 +167,16 @@ function ProjectCard({ project, i, onSelect }: { project: Project; i: number; on
             }}
             whileHover={{ borderColor: `${project.accentColor}40`, boxShadow: `0 20px 40px -15px rgba(0,0,0,0.7), 0 0 0 1px ${project.accentColor}30, 0 0 40px -10px ${project.accentColor}30` }}
         >
-            {/* Parallax image */}
+            {/* Parallax image with zoom+rotation */}
             <div className="absolute inset-0 overflow-hidden">
                 <motion.div className="absolute inset-[-10%] w-[120%] h-[120%]" style={{ x: imgX, y: imgY }}>
-                    <div className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity duration-700">
+                    <motion.div
+                        className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity duration-700"
+                        whileHover={{ scale: 1.08, rotate: 1 }}
+                        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                    >
                         <Image src={project.image} alt={project.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
-                    </div>
+                    </motion.div>
                 </motion.div>
                 <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-45`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
@@ -202,19 +206,30 @@ function ProjectCard({ project, i, onSelect }: { project: Project; i: number; on
 
                 <div>
                     <div className="flex flex-wrap gap-2 mb-5">
-                        {project.tags.map((tag) => (
-                            <span key={tag} className="text-[9px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 uppercase tracking-widest backdrop-blur-md">
+                        {project.tags.map((tag, tagIdx) => (
+                            <motion.span
+                                key={tag}
+                                className="text-[9px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 uppercase tracking-widest backdrop-blur-md"
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: i * 0.08 + tagIdx * 0.06 }}
+                            >
                                 {tag}
-                            </span>
+                            </motion.span>
                         ))}
                     </div>
                     <h3 className="text-2xl font-heading font-bold text-white mb-1 leading-tight">{project.title}</h3>
                     <p className="text-white/40 text-sm mb-5">{project.subtitle}</p>
                     <div className="flex items-center justify-between">
                         <span className="text-xs text-white/25 tracking-widest">{project.year}</span>
-                        <div className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/40 group-hover:bg-white/10 transition-all duration-300">
+                        <motion.div
+                            className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/40 group-hover:bg-white/10 transition-all duration-300"
+                            whileHover={{ scale: 1.2, rotate: 45 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                        >
                             <ArrowUpRight size={14} className="text-white/40 group-hover:text-white transition-colors" />
-                        </div>
+                        </motion.div>
                     </div>
                 </div>
             </div>
