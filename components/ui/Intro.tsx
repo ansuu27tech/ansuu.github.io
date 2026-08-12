@@ -10,11 +10,11 @@ export default function Intro() {
     useEffect(() => {
         document.body.style.overflow = "hidden";
 
-        // Total sequence: 3.5s to allow particle text to fully assemble
+        // Total sequence: 5s to allow particle text to fully assemble and be readable
         const timer = setTimeout(() => {
             setShow(false);
             document.body.style.overflow = "auto";
-        }, 3500);
+        }, 5000);
 
         return () => {
             document.body.style.overflow = "auto";
@@ -44,8 +44,8 @@ export default function Intro() {
                             opacity: [0, 1, 1, 0]
                         }}
                         transition={{
-                            duration: 3.5,
-                            times: [0, 0.2, 0.85, 1],
+                            duration: 5,
+                            times: [0, 0.15, 0.85, 1],
                             ease: "easeInOut"
                         }}
                         style={{ willChange: "transform, opacity", transformOrigin: "center" }}

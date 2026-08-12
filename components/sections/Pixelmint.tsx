@@ -48,10 +48,10 @@ const services = [
 ];
 
 const stats = [
-    { value: "25+", label: "Countries" },
-    { value: "50+", label: "Clients" },
-    { value: "99%", label: "Satisfaction" },
-    { value: "4.9★", label: "Rating" },
+    { value: "15+", label: "Projects Delivered" },
+    { value: "100%", label: "Client Success" },
+    { value: "0", label: "Compromises" },
+    { value: "5.0★", label: "Rating" },
 ];
 
 export default function Pixelmint() {
@@ -61,14 +61,14 @@ export default function Pixelmint() {
             <div
                 className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
                 style={{
-                    background: "radial-gradient(circle, rgba(163,230,53,0.08) 0%, transparent 65%)",
+                    background: "radial-gradient(circle, rgba(152,255,152,0.06) 0%, transparent 65%)",
                     filter: "blur(80px)",
                 }}
             />
             <div
                 className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
                 style={{
-                    background: "radial-gradient(circle, rgba(132,204,22,0.06) 0%, transparent 65%)",
+                    background: "radial-gradient(circle, rgba(152,255,152,0.04) 0%, transparent 65%)",
                     filter: "blur(100px)",
                 }}
             />
@@ -78,46 +78,41 @@ export default function Pixelmint() {
                 <motion.div
                     initial={{ opacity: 0, x: -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
+                    viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col gap-8"
                 >
-                    {/* Label */}
-                    <div className="flex items-center gap-3">
-                        <div className="relative w-10 h-10 rounded-full overflow-hidden border border-lime-400/30 flex-shrink-0 shadow-[0_0_15px_rgba(163,230,53,0.2)]">
-                            <Image
-                                src="/pixelmint-logo.jpg"
-                                alt="Pixelmint Studio"
-                                fill
-                                className="object-cover"
-                                sizes="40px"
-                            />
+                    {/* Numbering + Studio Badge */}
+                    <div>
+                        <div className="label-section mb-10">
+                            <span className="label-number">05</span>
+                            <span>/</span>
+                            <span>AGENCY</span>
                         </div>
-                        <span
-                            className="text-lime-400 text-xs font-bold tracking-[0.3em] uppercase"
-                            style={{ fontFamily: "var(--font-syne)" }}
-                        >
-                            PIXELMINT STUDIO
-                        </span>
+                        <div className="flex items-center gap-3">
+                            <div className="relative w-10 h-10 rounded-full overflow-hidden border border-brand-mint/30 flex-shrink-0 shadow-[0_0_15px_rgba(152,255,152,0.2)]">
+                                <Image
+                                    src="/pixelmint-logo.jpg"
+                                    alt="PixelMint Studio MVS"
+                                    fill
+                                    className="object-cover"
+                                    sizes="40px"
+                                />
+                            </div>
+                            <span className="text-brand-mint text-xs font-bold tracking-[0.3em] uppercase font-mono">
+                                PIXELMINT STUDIO MVS
+                            </span>
+                        </div>
                     </div>
 
                     {/* Heading */}
-                    <h2
-                        className="text-4xl md:text-5xl lg:text-[3.2rem] font-bold leading-[1.1] text-white"
-                        style={{ fontFamily: "var(--font-syne)" }}
-                    >
-                        We Build Digital
-                        <br />
-                        Experiences That{" "}
-                        <span className="text-lime-400">Convert.</span>
+                    <h2 className="heading-editorial text-4xl md:text-5xl lg:text-[3.2rem] leading-[1.1]">
+                        Crafting the <span className="text-brand-mint">Future</span> <br /> of Digital.
                     </h2>
 
                     {/* Body */}
-                    <p className="text-gray-400 text-lg leading-relaxed max-w-lg">
-                        Pixelmint Studio is a premium creative digital agency — building
-                        exceptional websites, brands, and digital experiences for ambitious
-                        businesses worldwide. From concept to conversion, we handle
-                        everything.
+                    <p className="body-lead max-w-lg text-white/80">
+                        PixelMint Studio MVS is a specialized design and engineering collective. We fuse experimental aesthetics with rigorous logic to build premium web experiences, resilient digital brands, and high-converting platforms for ambitious founders worldwide.
                     </p>
 
                     {/* CTAs */}
@@ -126,7 +121,7 @@ export default function Pixelmint() {
                             href="https://pixelmint-studio-delta.vercel.app"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group relative overflow-hidden inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-black text-sm bg-lime-400 hover:bg-lime-300 transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_rgba(163,230,53,0.5)] active:scale-95"
+                            className="group relative overflow-hidden inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-black text-sm bg-brand-mint hover:bg-white transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(152,255,152,0.4)] active:scale-95"
                         >
                             <div
                                 className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12"
@@ -144,14 +139,14 @@ export default function Pixelmint() {
                             href="https://pixelmint-studio-delta.vercel.app/contact.html"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm border border-lime-400/50 text-lime-400 hover:bg-lime-400 hover:text-black transition-all duration-500 hover:scale-105 active:scale-95"
+                            className="group inline-flex items-center gap-2 px-7 py-3.5 rounded-full font-bold text-sm border border-brand-mint/50 text-brand-mint hover:bg-brand-mint hover:text-black transition-all duration-500 hover:scale-105 active:scale-95"
                         >
                             Start a Project
                         </a>
                     </div>
 
                     {/* Stat Pills */}
-                    <div className="flex flex-wrap gap-3 mt-2">
+                    <div className="flex flex-wrap gap-3 mt-4">
                         {stats.map((stat, i) => (
                             <motion.div
                                 key={i}
@@ -163,15 +158,15 @@ export default function Pixelmint() {
                                     delay: 0.4 + i * 0.1,
                                     ease: [0.22, 1, 0.36, 1],
                                 }}
-                                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/8 bg-white/[0.03] backdrop-blur-sm"
+                                className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] backdrop-blur-sm"
                             >
                                 <span
-                                    className="text-lime-400 font-bold text-sm"
+                                    className="text-brand-mint font-bold text-sm"
                                     style={{ fontFamily: "var(--font-orbitron)" }}
                                 >
                                     {stat.value}
                                 </span>
-                                <span className="text-white/40 text-xs font-medium tracking-wide uppercase">
+                                <span className="text-white/40 text-[10px] font-mono tracking-widest uppercase">
                                     {stat.label}
                                 </span>
                             </motion.div>
@@ -221,50 +216,42 @@ function ServiceCard({
             ref={cardRef}
             initial={{ opacity: 0, x: 40, y: 20 }}
             whileInView={{ opacity: 1, x: 0, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, margin: "-50px" }}
             transition={{
                 duration: 0.6,
-                delay: 0.15 + index * 0.08,
+                delay: 0.1 + index * 0.08,
                 ease: [0.22, 1, 0.36, 1],
             }}
             whileHover={{ y: -4 }}
             onMouseMove={onMove}
             onMouseLeave={onLeave}
-            className="group relative p-6 rounded-2xl overflow-hidden transition-colors duration-300"
-            style={{
-                background: "rgba(10, 10, 12, 0.5)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                border: "1px solid rgba(255,255,255,0.06)",
-            }}
+            className="group relative p-6 glass-panel-premium rounded-2xl overflow-hidden transition-all duration-300"
         >
             {/* Mouse spotlight */}
             <div
                 className="pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300"
                 style={{
                     opacity: spot.visible ? 1 : 0,
-                    background: `radial-gradient(180px circle at ${spot.x}px ${spot.y}px, rgba(163,230,53,0.12) 0%, transparent 70%)`,
+                    background: `radial-gradient(180px circle at ${spot.x}px ${spot.y}px, rgba(152,255,152,0.1) 0%, transparent 70%)`,
                 }}
             />
 
             {/* Icon */}
-            <div className="relative z-10 w-10 h-10 rounded-xl bg-lime-400/10 border border-lime-400/20 flex items-center justify-center mb-4 group-hover:bg-lime-400/20 group-hover:border-lime-400/40 transition-all duration-300">
+            <div className="relative z-10 w-10 h-10 rounded-xl bg-brand-mint/10 border border-brand-mint/20 flex items-center justify-center mb-4 group-hover:bg-brand-mint/20 group-hover:border-brand-mint/40 transition-all duration-300">
                 <Icon
                     size={18}
-                    className="text-lime-400/80 group-hover:text-lime-400 transition-colors duration-300"
+                    className="text-brand-mint/80 group-hover:text-brand-mint transition-colors duration-300"
                     strokeWidth={1.8}
                 />
             </div>
 
             {/* Name */}
-            <h4 className="relative z-10 text-white font-bold text-sm mb-1.5 group-hover:text-lime-400 transition-colors duration-300"
-                style={{ fontFamily: "var(--font-syne)" }}
-            >
+            <h4 className="relative z-10 text-white font-bold text-sm mb-2 group-hover:text-brand-mint transition-colors duration-300 font-heading tracking-wide">
                 {service.name}
             </h4>
 
             {/* Desc */}
-            <p className="relative z-10 text-white/35 text-xs leading-relaxed">
+            <p className="relative z-10 text-white/40 text-xs leading-relaxed">
                 {service.desc}
             </p>
 
@@ -273,7 +260,7 @@ function ServiceCard({
                 className="pointer-events-none absolute bottom-0 left-0 h-[1px] rounded-full"
                 style={{
                     background:
-                        "linear-gradient(90deg, transparent, rgba(163,230,53,0.6), transparent)",
+                        "linear-gradient(90deg, transparent, rgba(152,255,152,0.6), transparent)",
                 }}
                 initial={{ width: "0%", left: "0%" }}
                 whileInView={{

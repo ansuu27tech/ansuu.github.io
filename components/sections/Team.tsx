@@ -14,7 +14,7 @@ const TEAM = [
     role: "Founder & CEO", isFounder: true,
     status: "Building Pixelmint",
     tagline: "Build things that make people stop scrolling.",
-    bio: "Design-obsessed engineer who turns abstract ideas into scalable digital experiences. Leading the pixel-perfect vision at PixelMint Studio.",
+    bio: "Design-obsessed engineer who turns abstract ideas into scalable digital experiences. Leading the pixel-perfect vision at PixelMint Studio MVS.",
     stats: [{ num: "50+", label: "Projects" }, { num: "3yr", label: "Exp." }, { num: "∞", label: "Ambition" }],
     skills: ["React", "Next.js", "UI/UX", "Branding", "Node.js"],
     image: "/mohammed anas.jpeg",

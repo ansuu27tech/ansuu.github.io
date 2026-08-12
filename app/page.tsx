@@ -4,6 +4,7 @@ import About from "@/components/sections/About";
 
 // Lazy-load all heavy sections — skips their JS from the initial bundle
 // so the page renders fast and the main thread is freed up early
+const Navigation = dynamic(() => import("@/components/ui/Navigation"));
 const Experience = dynamic(() => import("@/components/sections/Experience"));
 const Pixelmint = dynamic(() => import("@/components/sections/Pixelmint"));
 const Services = dynamic(() => import("@/components/sections/Services"));
@@ -15,6 +16,7 @@ const Contact = dynamic(() => import("@/components/sections/Contact"));
 const Mindset = dynamic(() => import("@/components/sections/Mindset"));
 const Philosophy = dynamic(() => import("@/components/sections/Philosophy"));
 const Impact = dynamic(() => import("@/components/sections/Impact"));
+const Footer = dynamic(() => import("@/components/sections/Footer"));
 const SplitText = dynamic(() => import("@/components/ui/SplitText"));
 // Intro is also lazy-loaded — not needed at first paint
 const Intro = dynamic(() => import("@/components/ui/Intro"));
@@ -23,7 +25,9 @@ const Intro = dynamic(() => import("@/components/ui/Intro"));
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-transparent text-white selection:bg-brand-mint selection:text-black">
+    <main id="main-content" className="relative min-h-screen bg-transparent text-white selection:bg-brand-mint selection:text-black">
+
+      <Navigation />
 
       <div className="relative z-10 bg-transparent">
         <Intro />
@@ -67,6 +71,7 @@ export default function Home() {
         <WebShowcase />
         <Testimonials />
         <Contact />
+        <Footer />
       </div>
     </main>
   );

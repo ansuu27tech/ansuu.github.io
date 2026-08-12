@@ -34,7 +34,7 @@ const projects: Project[] = [
   },
   {
     id: "pixelmint",
-    title: "Pixelmint Studio",
+    title: "PixelMint Studio MVS",
     category: "Branding",
     categories: ["Branding", "Creative Tech", "Web Design"],
     tags: ["Visual Identity", "Motion", "Web"],

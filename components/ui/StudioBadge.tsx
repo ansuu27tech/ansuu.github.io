@@ -59,7 +59,7 @@ export default function StudioBadge() {
                         <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 border border-white/10">
                             <Image
                                 src="/pixelmint-logo.jpg"
-                                alt="Pixelmint Studio"
+                                alt="PixelMint Studio MVS"
                                 fill
                                 className="object-cover"
                                 sizes="32px"
@@ -72,7 +72,7 @@ export default function StudioBadge() {
                                 className="text-white text-xs font-bold tracking-wide whitespace-nowrap"
                                 style={{ fontFamily: "var(--font-syne)" }}
                             >
-                                Pixelmint Studio
+                                PixelMint Studio MVS
                             </span>
                             <motion.span
                                 initial={false}

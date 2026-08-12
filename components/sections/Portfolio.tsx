@@ -45,14 +45,14 @@ const projects: Project[] = [
     {
         id: 2,
         index: "02",
-        title: "Pixelmint Studio",
+        title: "PixelMint Studio MVS",
         subtitle: "Official Agency Website — Built End-to-End",
         category: "Studio",
         tags: ["Next.js", "Web Design", "Agency", "Branding"],
         gradient: "from-[#0a0a0a] via-[#1a0a2e] to-[#0a0a0a]",
-        accentColor: "#a3e635",
+        accentColor: "#98ff98", // Brand mint
         description:
-            "Designed and developed the complete digital identity for Pixelmint Studio — a premium creative agency website featuring multi-page architecture, team showcase, 11-service grid, client testimonials, and a conversion-optimised contact system.",
+            "Designed and developed the complete digital identity for PixelMint Studio MVS — a premium creative agency website featuring multi-page architecture, team showcase, 11-service grid, client testimonials, and a conversion-optimized contact system.",
         outcome: "Serving clients across 25+ countries with a 99% satisfaction rate.",
         stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Framer Motion"],
         year: "2026",
@@ -132,10 +132,10 @@ const projects: Project[] = [
 
 function ProjectCard({ project, i, onSelect }: { project: Project; i: number; onSelect: () => void }) {
     const cardRef = useRef<HTMLDivElement>(null);
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
-    const imgX = useSpring(useTransform(mouseX, [0, 1], [-12, 12]), { stiffness: 150, damping: 20 });
-    const imgY = useSpring(useTransform(mouseY, [0, 1], [-8, 8]), { stiffness: 150, damping: 20 });
+    const mouseX = useMotionValue(0.5);
+    const mouseY = useMotionValue(0.5);
+    const imgX = useSpring(useTransform(mouseX, [0, 1], [-15, 15]), { stiffness: 150, damping: 20 });
+    const imgY = useSpring(useTransform(mouseY, [0, 1], [-10, 10]), { stiffness: 150, damping: 20 });
 
     const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         const r = cardRef.current?.getBoundingClientRect();
@@ -155,46 +155,46 @@ function ProjectCard({ project, i, onSelect }: { project: Project; i: number; on
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.6, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
             onClick={onSelect}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="group cursor-pointer relative overflow-hidden rounded-2xl bg-white/[0.02] transition-all duration-500 hover:-translate-y-2"
+            className="group cursor-pointer relative overflow-hidden rounded-[2rem] bg-white/[0.02] transition-all duration-500 hover:-translate-y-2"
             style={{
-                minHeight: "340px",
+                minHeight: "380px",
                 border: `1px solid rgba(255,255,255,0.06)`,
-                ...(project.liveUrl ? { boxShadow: "0 0 30px rgba(132,204,22,0.15)" } : {}),
+                ...(project.liveUrl ? { boxShadow: "0 0 40px rgba(152,255,152,0.1)" } : {}),
             }}
-            whileHover={{ borderColor: `${project.accentColor}40`, boxShadow: `0 20px 40px -15px rgba(0,0,0,0.7), 0 0 0 1px ${project.accentColor}30, 0 0 40px -10px ${project.accentColor}30` }}
+            whileHover={{ borderColor: `${project.accentColor}50`, boxShadow: `0 20px 40px -15px rgba(0,0,0,0.7), 0 0 0 1px ${project.accentColor}30, 0 0 40px -10px ${project.accentColor}30` }}
         >
             {/* Parallax image with zoom+rotation */}
-            <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute inset-0 overflow-hidden rounded-[2rem]">
                 <motion.div className="absolute inset-[-10%] w-[120%] h-[120%]" style={{ x: imgX, y: imgY }}>
                     <motion.div
                         className="absolute inset-0 opacity-60 group-hover:opacity-80 transition-opacity duration-700"
-                        whileHover={{ scale: 1.08, rotate: 1 }}
+                        whileHover={{ scale: 1.05, rotate: 1 }}
                         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                     >
                         <Image src={project.image} alt={project.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 33vw" />
                     </motion.div>
                 </motion.div>
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-45`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-50 transition-opacity duration-500 group-hover:opacity-40`} />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/40 to-transparent" />
             </div>
 
             {/* Hover glow border inset */}
-            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: `inset 0 0 0 1px ${project.accentColor}30` }} />
+            <div className="absolute inset-0 rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: `inset 0 0 0 1px ${project.accentColor}30` }} />
 
             {/* Content */}
-            <div className="relative z-10 p-8 h-full flex flex-col justify-between" style={{ minHeight: "340px" }}>
+            <div className="relative z-10 p-8 h-full flex flex-col justify-between" style={{ minHeight: "380px" }}>
                 <div className="flex items-start justify-between">
-                    <span className="text-5xl font-heading font-bold leading-none opacity-20 select-none group-hover:opacity-50 transition-opacity duration-300" style={{ color: project.accentColor }}>
+                    <span className="text-6xl font-heading font-bold leading-none opacity-20 select-none group-hover:opacity-60 transition-opacity duration-300" style={{ color: project.accentColor }}>
                         {project.index}
                     </span>
                     <div className="flex items-center gap-2">
                         {project.liveUrl && (
-                            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-lime-400/10 border border-lime-400/30 text-lime-400">
-                                <span className="w-1.5 h-1.5 rounded-full bg-lime-400 animate-pulse" />
+                            <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-brand-mint/10 border border-brand-mint/30 text-brand-mint">
+                                <span className="w-1.5 h-1.5 rounded-full bg-brand-mint animate-pulse" />
                                 LIVE
                             </span>
                         )}
@@ -209,26 +209,26 @@ function ProjectCard({ project, i, onSelect }: { project: Project; i: number; on
                         {project.tags.map((tag, tagIdx) => (
                             <motion.span
                                 key={tag}
-                                className="text-[9px] px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/60 uppercase tracking-widest backdrop-blur-md"
+                                className="text-[9px] px-3 py-1.5 rounded-full bg-[#020202]/50 border border-white/10 text-white/60 uppercase tracking-widest backdrop-blur-md"
                                 initial={{ opacity: 0, y: 10 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.4, delay: i * 0.08 + tagIdx * 0.06 }}
+                                transition={{ duration: 0.4, delay: i * 0.05 + tagIdx * 0.05 }}
                             >
                                 {tag}
                             </motion.span>
                         ))}
                     </div>
-                    <h3 className="text-2xl font-heading font-bold text-white mb-1 leading-tight">{project.title}</h3>
-                    <p className="text-white/40 text-sm mb-5">{project.subtitle}</p>
-                    <div className="flex items-center justify-between">
-                        <span className="text-xs text-white/25 tracking-widest">{project.year}</span>
+                    <h3 className="text-2xl md:text-3xl font-heading font-bold text-white mb-2 leading-tight group-hover:text-[var(--color-brand-mint)] transition-colors duration-300" style={{ ...(project.id === 2 ? { color: 'var(--color-brand-mint)' } : {}) }}>{project.title}</h3>
+                    <p className="text-white/50 text-sm mb-6">{project.subtitle}</p>
+                    <div className="flex items-center justify-between mt-auto">
+                        <span className="text-[10px] font-mono text-white/30 tracking-widest uppercase">{project.year}</span>
                         <motion.div
-                            className="w-9 h-9 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/40 group-hover:bg-white/10 transition-all duration-300"
-                            whileHover={{ scale: 1.2, rotate: 45 }}
+                            className="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 group-hover:border-white/40 group-hover:bg-white/10 transition-all duration-300"
+                            whileHover={{ scale: 1.1, rotate: 45 }}
                             transition={{ type: "spring", stiffness: 400, damping: 15 }}
                         >
-                            <ArrowUpRight size={14} className="text-white/40 group-hover:text-white transition-colors" />
+                            <ArrowUpRight size={16} className="text-white/40 group-hover:text-white transition-colors" />
                         </motion.div>
                     </div>
                 </div>
@@ -242,44 +242,30 @@ export default function Portfolio() {
     const selectedProject = projects.find((p) => p.id === selectedId);
 
     return (
-        <SectionWrapper id="portfolio" className="bg-transparent">
+        <SectionWrapper id="portfolio" className="bg-transparent py-24 md:py-32">
+            
             {/* Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 px-4 md:px-0">
                 <div>
-                    <motion.p
-                        className="text-xs uppercase tracking-[0.3em] text-white/40 mb-4 font-medium"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                    >
-                        Work
-                    </motion.p>
-                    <motion.h2
-                        className="text-5xl md:text-7xl font-heading font-bold leading-none"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                    >
+                    <div className="label-section mb-6">
+                        <span className="label-number">06</span>
+                        <span>/</span>
+                        <span>PORTFOLIO</span>
+                    </div>
+                    <h2 className="heading-editorial text-4xl md:text-5xl lg:text-[4rem]">
                         Selected
                         <br />
-                        <span className="text-white/20">Works</span>
-                    </motion.h2>
+                        <span className="text-white/30">Works.</span>
+                    </h2>
                 </div>
-                <motion.p
-                    className="text-white/40 text-sm max-w-xs leading-relaxed"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                >
+                <p className="body-refined max-w-sm">
                     A curated collection of projects spanning AI, design systems, and
-                    creative technology.
-                </motion.p>
+                    creative technology. Hover to explore, click for details.
+                </p>
             </div>
 
             {/* Projects Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4 md:px-0">
                 {projects.map((project, i) => (
                     <ProjectCard key={project.id} project={project} i={i} onSelect={() => setSelectedId(project.id)} />
                 ))}
@@ -296,7 +282,7 @@ export default function Portfolio() {
                             exit={{ opacity: 0 }}
                             transition={{ duration: 0.3 }}
                             onClick={() => setSelectedId(null)}
-                            className="absolute inset-0 bg-black/80 backdrop-blur-md"
+                            className="absolute inset-0 bg-[#020202]/80 backdrop-blur-xl"
                         />
 
                         {/* Modal Card */}
@@ -305,31 +291,33 @@ export default function Portfolio() {
                             animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
                             exit={{ opacity: 0, scale: 0.95, y: 20, filter: "blur(10px)" }}
                             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                            className="relative w-full max-w-3xl rounded-3xl overflow-hidden border border-white/10 bg-[#050508] shadow-2xl"
+                            className="relative w-full max-w-3xl rounded-[2rem] overflow-hidden border border-white/10 bg-[#050505] shadow-2xl"
                         >
                             {/* Image Banner */}
-                            <div className="w-full h-52 relative overflow-hidden">
+                            <div className="w-full h-56 relative overflow-hidden">
                                 <Image
                                     src={selectedProject.image}
                                     alt={selectedProject.title}
                                     fill
                                     className="object-cover"
-                                    style={{ opacity: 0.6 }}
+                                    style={{ opacity: 0.5 }}
                                     sizes="672px"
                                 />
-                                <div className={`absolute inset-0 bg-gradient-to-br ${selectedProject.gradient} opacity-55`} />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0b0f] via-transparent to-transparent" />
+                                <div className={`absolute inset-0 bg-gradient-to-br ${selectedProject.gradient} opacity-50`} />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-[#050505]/40 to-transparent" />
+                                
                                 {/* Big index number */}
-                                <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     <span
-                                        className="text-9xl font-heading font-bold opacity-10 select-none"
+                                        className="text-[10rem] font-heading font-bold opacity-[0.07] select-none"
                                         style={{ color: selectedProject.accentColor }}
                                     >
                                         {selectedProject.index}
                                     </span>
                                 </div>
+                                
                                 {/* Category pill */}
-                                <div className="absolute bottom-4 left-6">
+                                <div className="absolute bottom-6 left-8">
                                     <span
                                         className="text-[10px] uppercase tracking-widest font-semibold px-3 py-1.5 rounded-full border"
                                         style={{
@@ -346,37 +334,37 @@ export default function Portfolio() {
                             {/* Close Button */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); setSelectedId(null); }}
-                                className="absolute top-4 right-4 p-2 rounded-full bg-black/40 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition-all"
+                                className="absolute top-6 right-6 p-2 rounded-full bg-black/40 border border-white/10 text-white/60 hover:text-white hover:bg-white/10 transition-all z-10"
                             >
-                                <X size={16} />
+                                <X size={18} />
                             </button>
 
                             {/* Body */}
                             <div className="p-8 md:p-10">
-                                <div className="flex items-start justify-between mb-2">
+                                <div className="flex items-start justify-between mb-3">
                                     <h2 className="text-3xl font-heading font-bold text-white leading-tight">
                                         {selectedProject.title}
                                     </h2>
-                                    <ExternalLink size={18} className="text-white/20 mt-1 flex-shrink-0" />
+                                    {selectedProject.liveUrl && <ExternalLink size={18} className="text-white/20 mt-1 flex-shrink-0" />}
                                 </div>
                                 <p className="text-white/40 text-sm mb-6">{selectedProject.subtitle}</p>
 
-                                <p className="text-white/60 leading-relaxed mb-8 text-sm">
+                                <p className="body-refined mb-8">
                                     {selectedProject.description}
                                 </p>
 
                                 {/* Outcome */}
                                 <div
-                                    className="rounded-xl p-4 mb-8 border"
+                                    className="rounded-2xl p-5 mb-8 border"
                                     style={{
-                                        background: `${selectedProject.accentColor}08`,
-                                        borderColor: `${selectedProject.accentColor}25`,
+                                        background: `${selectedProject.accentColor}05`,
+                                        borderColor: `${selectedProject.accentColor}20`,
                                     }}
                                 >
-                                    <p className="text-[10px] uppercase tracking-widest mb-1" style={{ color: selectedProject.accentColor }}>
+                                    <p className="text-[10px] uppercase tracking-widest mb-2" style={{ color: selectedProject.accentColor }}>
                                         Outcome
                                     </p>
-                                    <p className="text-white/80 text-sm font-medium">{selectedProject.outcome}</p>
+                                    <p className="text-white/90 text-sm leading-relaxed">{selectedProject.outcome}</p>
                                 </div>
 
                                 {/* Live Site Link */}
@@ -385,28 +373,28 @@ export default function Portfolio() {
                                         href={selectedProject.liveUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 rounded-full text-sm font-bold bg-lime-400 text-black hover:bg-lime-300 transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(163,230,53,0.4)]"
+                                        className="inline-flex items-center gap-2 px-6 py-3 mb-8 rounded-full text-sm font-bold bg-brand-mint text-black hover:bg-white transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(152,255,152,0.4)]"
                                     >
-                                        Visit Live Site <ArrowUpRight size={14} />
+                                        Visit Live Site <ArrowUpRight size={16} />
                                     </a>
                                 )}
 
                                 {/* Meta Row */}
-                                <div className="flex flex-wrap items-center justify-between gap-4">
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-widest text-white/25 mb-2">Tech Stack</p>
+                                <div className="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-white/5">
+                                    <div className="flex-1">
+                                        <p className="text-[10px] uppercase tracking-widest text-white/30 mb-3">Tech Stack</p>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedProject.stack.map((tech) => (
-                                                <span key={tech} className="text-xs px-2.5 py-1 rounded-full bg-white/5 border border-white/8 text-white/50">
+                                                <span key={tech} className="text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white/50">
                                                     {tech}
                                                 </span>
                                             ))}
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-[10px] uppercase tracking-widest text-white/25 mb-1">Role</p>
-                                        <p className="text-white/60 text-xs">{selectedProject.role}</p>
-                                        <p className="text-white/25 text-xs mt-1">{selectedProject.year}</p>
+                                        <p className="text-[10px] uppercase tracking-widest text-white/30 mb-2">Role & Year</p>
+                                        <p className="text-white/70 text-xs font-medium">{selectedProject.role}</p>
+                                        <p className="text-white/30 text-[10px] font-mono mt-1">{selectedProject.year}</p>
                                     </div>
                                 </div>
                             </div>

@@ -3,22 +3,21 @@
 import { useRef, useEffect, useState } from "react";
 import WebGLCursorMask from "../ui/WebGLCursorMask";
 import { motion, useScroll, useTransform, AnimatePresence, useInView } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Linkedin } from "lucide-react";
+import { ArrowRight, Linkedin } from "lucide-react";
 import AnimatedName from "@/components/ui/AnimatedName";
-import Logo from "../ui/Logo";
 import OrbitingIcons from "../ui/OrbitingIcons";
 import MagneticButton from "../ui/MagneticButton";
 
 const RotatingText = () => {
     const texts = [
-        "I design brands that convert",
-        "I build visuals that sell",
-        "I turn ideas into premium experiences"
+        "AI & Data Science · Creative Development · UI/UX Design",
+        "Founder, PixelMint Studio MVS — Building premium digital experiences",
+        "Turning complex ideas into elegant, high-impact products"
     ];
     const [index, setIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => setIndex(prev => (prev + 1) % texts.length), 3500);
+        const interval = setInterval(() => setIndex(prev => (prev + 1) % texts.length), 4000);
         return () => clearInterval(interval);
     }, [texts.length]);
 
@@ -27,12 +26,12 @@ const RotatingText = () => {
             <AnimatePresence mode="wait">
                 <motion.p
                     key={index}
-                    initial={{ y: 15, opacity: 0, filter: "blur(8px)", scale: 0.95 }}
-                    animate={{ y: 0, opacity: 1, filter: "blur(0px)", scale: 1 }}
-                    exit={{ y: -15, opacity: 0, filter: "blur(8px)", scale: 1.05 }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    className="absolute text-gray-300 font-normal whitespace-nowrap text-center"
-                    style={{ fontSize: "0.9rem", fontFamily: "var(--font-exo2)", letterSpacing: "0.08em", willChange: "transform, opacity, filter" }}
+                    initial={{ y: 15, opacity: 0, filter: "blur(6px)" }}
+                    animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                    exit={{ y: -15, opacity: 0, filter: "blur(6px)" }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    className="absolute text-white/50 font-normal whitespace-nowrap text-center text-sm tracking-wide"
+                    style={{ fontFamily: "var(--font-inter)", willChange: "transform, opacity, filter" }}
                 >
                     {texts[index]}
                 </motion.p>
@@ -59,7 +58,6 @@ const StatCounter = ({ end, suffix, label, delayIndex }: { end: number; suffix: 
             const step = (timestamp: number) => {
                 if (!startTime) startTime = timestamp;
                 const progress = Math.min((timestamp - startTime) / duration, 1);
-                // Ease-out cubic for a smooth deceleration
                 const eased = 1 - Math.pow(1 - progress, 3);
                 setCount(Math.round(eased * end));
                 if (progress < 1) {
@@ -76,20 +74,21 @@ const StatCounter = ({ end, suffix, label, delayIndex }: { end: number; suffix: 
     }, [isInView, end, delayIndex]);
 
     return (
-        <motion.div 
-            ref={ref} 
-            initial={{ opacity: 0, x: 20 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: delayIndex * 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col items-end text-right glass-panel px-5 py-3 rounded-xl border border-white/5 hover:border-brand-mint/40 transition-all duration-300 relative overflow-hidden group min-w-[130px]"
+        <motion.div
+            ref={ref}
+            initial={{ opacity: 0, y: 15 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.8 + delayIndex * 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="flex flex-col items-center text-center"
             style={{ willChange: "transform, opacity" }}
-            whileHover={{ scale: 1.05, y: -2 }}
         >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out pointer-events-none" />
-            <div className="font-bold leading-none text-transparent bg-clip-text bg-gradient-to-r from-brand-mint to-cyan-400 drop-shadow-[0_0_12px_rgba(152,255,152,0.4)] flex items-center justify-end" style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1.2rem, 2.5vw, 1.8rem)" }}>
-                <span>{count}</span><span>{suffix}</span>
+            <div
+                className="font-bold leading-none text-white"
+                style={{ fontFamily: "var(--font-orbitron)", fontSize: "clamp(1.1rem, 2vw, 1.6rem)" }}
+            >
+                <span>{count}</span><span className="text-brand-mint">{suffix}</span>
             </div>
-            <span className="text-gray-300 text-[0.6rem] md:text-[0.65rem] tracking-[0.2em] uppercase mt-1.5 font-bold" style={{ fontFamily: "var(--font-syne)" }}>
+            <span className="text-white/30 text-[0.6rem] tracking-[0.2em] uppercase mt-1.5 font-medium">
                 {label}
             </span>
         </motion.div>
@@ -110,17 +109,15 @@ export default function Hero() {
 
     useEffect(() => {
         setParticles(
-            Array.from({ length: 18 }, () => ({
+            Array.from({ length: 12 }, () => ({
                 x: Math.random() * 100,
                 y: Math.random() * 100,
-                s: Math.random() * 2 + 1,
+                s: Math.random() * 1.5 + 0.5,
                 d: Math.random() * 12 + 8,
                 dl: Math.random() * 6,
             }))
         );
     }, []);
-
-    // WebGL2 cursor mask handles its own mouse events via window
 
     // Animated background node-line network (canvas)
     useEffect(() => {
@@ -129,10 +126,9 @@ export default function Hero() {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // Fewer nodes on mobile for better perf
         const isMobile = window.innerWidth < 768;
-        const COUNT = isMobile ? 30 : 50;
-        const LINK_DIST = 160;
+        const COUNT = isMobile ? 25 : 40;
+        const LINK_DIST = 140;
         const FACE_R_FRAC = 0.30;
 
         const nodes = Array.from({ length: COUNT }, () => {
@@ -141,8 +137,8 @@ export default function Hero() {
             return {
                 x: window.innerWidth  / 2 + Math.cos(angle) * r * 2.2,
                 y: window.innerHeight / 2 + Math.sin(angle) * r * 1.1,
-                vx: (Math.random() - 0.5) * 0.45,
-                vy: (Math.random() - 0.5) * 0.45,
+                vx: (Math.random() - 0.5) * 0.35,
+                vy: (Math.random() - 0.5) * 0.35,
             };
         });
 
@@ -156,7 +152,6 @@ export default function Hero() {
         let isVisible = true;
 
         const draw = () => {
-            // Skip drawing when section is off-screen — saves GPU/CPU
             if (!isVisible) {
                 lineRafRef.current = requestAnimationFrame(draw);
                 return;
@@ -190,7 +185,6 @@ export default function Hero() {
                 }
             }
 
-            // Use squared distance check to avoid Math.sqrt in the inner loop
             const linkDistSq = LINK_DIST * LINK_DIST;
             for (let i = 0; i < nodes.length; i++) {
                 for (let j = i + 1; j < nodes.length; j++) {
@@ -198,12 +192,12 @@ export default function Hero() {
                     const dy = nodes[i].y - nodes[j].y;
                     const dsq = dx * dx + dy * dy;
                     if (dsq < linkDistSq) {
-                        const alpha = (1 - Math.sqrt(dsq) / LINK_DIST) * 0.22;
+                        const alpha = (1 - Math.sqrt(dsq) / LINK_DIST) * 0.18;
                         ctx.beginPath();
                         ctx.moveTo(nodes[i].x, nodes[i].y);
                         ctx.lineTo(nodes[j].x, nodes[j].y);
-                        ctx.strokeStyle = `rgba(96,165,250,${alpha})`;
-                        ctx.lineWidth = 1;
+                        ctx.strokeStyle = `rgba(152,255,152,${alpha})`;
+                        ctx.lineWidth = 0.8;
                         ctx.stroke();
                     }
                 }
@@ -211,15 +205,14 @@ export default function Hero() {
 
             for (const n of nodes) {
                 ctx.beginPath();
-                ctx.arc(n.x, n.y, 1.5, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(34,211,238,0.3)";
+                ctx.arc(n.x, n.y, 1.2, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(152,255,152,0.25)";
                 ctx.fill();
             }
             ctx.restore();
             lineRafRef.current = requestAnimationFrame(draw);
         };
 
-        // Pause canvas when hero section scrolls out of view
         const observer = new IntersectionObserver(
             ([entry]) => { isVisible = entry.isIntersecting; },
             { threshold: 0 }
@@ -240,54 +233,51 @@ export default function Hero() {
             ref={sectionRef}
             className="relative w-full min-h-[100svh] md:h-[100svh] overflow-x-hidden md:overflow-hidden bg-transparent flex flex-col md:block pb-16 md:pb-0"
         >
+            {/* ── Background Layer ── */}
             <div className="absolute inset-0 z-0 pointer-events-none">
-                {/* Aurora orbs */}
-                <div className="absolute" style={{ top: "20%", left: "10%", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, rgba(34,211,238,0.18) 0%, transparent 65%)", filter: "blur(80px)", animation: "hero-orb-breathe 7s ease-in-out infinite" }} />
-                <div className="absolute" style={{ top: "30%", right: "10%", width: 500, height: 500, borderRadius: "50%", background: "radial-gradient(circle, rgba(99,102,241,0.14) 0%, transparent 65%)", filter: "blur(80px)", animation: "hero-orb-breathe 9s ease-in-out infinite reverse" }} />
-                <div className="absolute" style={{ bottom: "10%", left: "30%", width: 400, height: 400, borderRadius: "50%", background: "radial-gradient(circle, rgba(52,211,153,0.10) 0%, transparent 65%)", filter: "blur(60px)", animation: "hero-orb-breathe 11s ease-in-out infinite" }} />
-                <motion.div 
-                    className="absolute inset-0 z-0"
-                    animate={{ opacity: [0.15, 0.35, 0.15], scale: [1, 1.05, 1] }}
-                    transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                    style={{ background: "radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.15) 0%, transparent 50%)" }}
+                {/* Single restrained aurora orb */}
+                <div
+                    className="absolute"
+                    style={{
+                        top: "25%", left: "15%",
+                        width: 500, height: 500,
+                        borderRadius: "50%",
+                        background: "radial-gradient(circle, rgba(152,255,152,0.08) 0%, transparent 65%)",
+                        filter: "blur(80px)",
+                        animation: "hero-orb-breathe 8s ease-in-out infinite"
+                    }}
                 />
-                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ opacity: 0.5 }} />
+                {/* Subtle secondary glow */}
+                <motion.div
+                    className="absolute inset-0 z-0"
+                    animate={{ opacity: [0.08, 0.18, 0.08] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                    style={{ background: "radial-gradient(circle at 50% 50%, rgba(152, 255, 152, 0.08) 0%, transparent 50%)" }}
+                />
 
-                <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-                    <span className="select-none whitespace-nowrap font-black uppercase text-white pointer-events-none"
-                        style={{ fontSize: "clamp(4rem, 15vw, 14rem)", opacity: 0.12, letterSpacing: "-0.04em", filter: "blur(2px)", mixBlendMode: "screen", userSelect: "none" }}>
-                        PIXELMINT
-                    </span>
-                </div>
+                {/* Canvas network */}
+                <canvas ref={canvasRef} className="absolute inset-0 w-full h-full" style={{ opacity: 0.4 }} />
 
+                {/* Single marquee band — tech keywords */}
                 <style>{`
                     @keyframes marquee-ltr  { from { transform: translateX(-50%); } to { transform: translateX(0%); } }
-                    @keyframes marquee-rtl  { from { transform: translateX(0%);  } to { transform: translateX(-50%); } }
                 `}</style>
-                <div className="absolute top-[18%] left-0 right-0 overflow-hidden pointer-events-none select-none">
-                    <div className="flex whitespace-nowrap" style={{ animation: "marquee-ltr 30s linear infinite", opacity: 0.18 }}>
-                        {[...Array(4)].map((_, i) => <span key={i} className="text-blue-300 font-mono font-semibold uppercase tracking-widest mr-16" style={{ fontSize: "clamp(0.6rem, 1.1vw, 0.85rem)" }}>Artificial Intelligence &nbsp;·&nbsp; Machine Learning &nbsp;·&nbsp; Data Science &nbsp;·&nbsp; Neural Networks &nbsp;·&nbsp; Deep Learning &nbsp;·&nbsp; Python &nbsp;·&nbsp; B.Tech AI&amp;DS &nbsp;·&nbsp; Computer Vision &nbsp;·&nbsp;</span>)}
-                    </div>
-                </div>
-                <div className="absolute inset-0 overflow-hidden pointer-events-none select-none flex items-center" style={{ transform: "rotate(-6deg)", transformOrigin: "center" }}>
-                    <div className="flex whitespace-nowrap w-full" style={{ animation: "marquee-rtl 22s linear infinite", opacity: 0.15 }}>
-                        {[...Array(4)].map((_, i) => <span key={i} className="text-cyan-300 font-mono font-bold uppercase tracking-[0.25em] mr-20" style={{ fontSize: "clamp(0.7rem, 1.4vw, 1rem)" }}>PIXELMINT STUDIO &nbsp;·&nbsp; UI / UX Design &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Technology &nbsp;·&nbsp; AI Engineer &nbsp;·&nbsp;</span>)}
-                    </div>
-                </div>
-                <div className="absolute bottom-[30%] left-0 right-0 overflow-hidden pointer-events-none select-none">
-                    <div className="flex whitespace-nowrap" style={{ animation: "marquee-ltr 40s linear infinite", opacity: 0.16 }}>
-                        {[...Array(4)].map((_, i) => <span key={i} className="text-indigo-300 font-mono font-semibold uppercase tracking-widest mr-16" style={{ fontSize: "clamp(0.55rem, 1vw, 0.78rem)" }}>NLP &nbsp;·&nbsp; Data Analysis &nbsp;·&nbsp; TensorFlow &nbsp;·&nbsp; PyTorch &nbsp;·&nbsp; Next.js &nbsp;·&nbsp; React &nbsp;·&nbsp; Cloud AI &nbsp;·&nbsp; Portfolio &nbsp;·&nbsp; Problem Solving &nbsp;·&nbsp; Innovation &nbsp;·&nbsp;</span>)}
+                <div className="absolute top-[20%] left-0 right-0 overflow-hidden pointer-events-none select-none">
+                    <div className="flex whitespace-nowrap" style={{ animation: "marquee-ltr 35s linear infinite", opacity: 0.08 }}>
+                        {[...Array(4)].map((_, i) => <span key={i} className="text-white/60 font-mono font-medium uppercase tracking-[0.3em] mr-16" style={{ fontSize: "clamp(0.55rem, 1vw, 0.75rem)" }}>Artificial Intelligence &nbsp;·&nbsp; Machine Learning &nbsp;·&nbsp; Data Science &nbsp;·&nbsp; UI/UX Design &nbsp;·&nbsp; Web Development &nbsp;·&nbsp; Creative Technology &nbsp;·&nbsp;</span>)}
                     </div>
                 </div>
 
+                {/* Floating particles — reduced count */}
                 {particles?.map((p, i) => (
-                    <motion.div key={i} className="absolute rounded-full bg-blue-400"
+                    <motion.div key={i} className="absolute rounded-full bg-brand-mint"
                         style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.s, height: p.s, opacity: 0, willChange: "transform, opacity" }}
-                        animate={{ y: [0, -60, 0], opacity: [0, 0.35, 0] }}
+                        animate={{ y: [0, -50, 0], opacity: [0, 0.25, 0] }}
                         transition={{ duration: p.d, repeat: Infinity, delay: p.dl, ease: [0.45, 0, 0.55, 1] }} />
                 ))}
             </div>
 
+            {/* ── Portrait / WebGL Mask Layer ── */}
             <div className="relative md:absolute md:inset-0 w-full flex justify-center items-center z-[21] pointer-events-none md:pointer-events-auto order-1 md:order-none flex-shrink-0" style={{ paddingTop: "80px" }}>
                 <div className="relative w-full max-w-[280px] sm:max-w-[320px] md:max-w-none mb-12 md:mb-0 aspect-[3/4] md:aspect-auto md:w-full md:h-full block mx-auto">
                     <div className="absolute inset-0 z-[19]">
@@ -302,64 +292,17 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none bg-gradient-to-t from-[#030305]/100 via-[#030305]/70 to-transparent" style={{ height: "58%" }} />
+            {/* ── Gradient Overlays ── */}
+            <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none bg-gradient-to-t from-[#030305] via-[#030305]/70 to-transparent" style={{ height: "58%" }} />
             <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none h-[130px] bg-gradient-to-b from-[#030305]/80 to-transparent" />
 
-            <nav className="absolute top-0 left-0 w-full px-8 py-6 z-40 flex items-center gap-5">
-                <motion.button
-                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                    initial={{ opacity: 0, scale: 0.5, rotate: -180 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-                >
-                    <Logo className="w-14 h-14 md:w-16 md:h-16 rounded-full shadow-[0_0_25px_rgba(34,211,238,0.4)] hover:scale-105 transition-transform origin-center" />
-                </motion.button>
-                <div className="flex flex-col select-none cursor-default pb-1">
-                    <span className="text-white font-bold leading-none tracking-wide text-2xl md:text-3xl flex" style={{ fontFamily: "var(--font-orbitron)" }}>
-                        {"PIXELMINT".split("").map((letter, i) => (
-                            <motion.span
-                                key={i}
-                                className="bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(34,211,238,0.6)] inline-block"
-                                initial={{ opacity: 0, y: -20, filter: "blur(10px)" }}
-                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                                transition={{ duration: 0.5, delay: 0.3 + i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                            >
-                                {letter}
-                            </motion.span>
-                        ))}
-                    </span>
-                    <motion.span
-                        className="text-gray-300 text-[0.7rem] md:text-sm tracking-[0.6em] mt-1 uppercase"
-                        style={{ fontFamily: "var(--font-exo2)" }}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.6, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                    >STUDIO</motion.span>
-                </div>
-
-                <motion.a
-                    href="https://pixelmint-studio-delta.vercel.app/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, y: -20, filter: "blur(8px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.9, delay: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                    className="ml-auto group relative flex items-center gap-1.5 md:gap-2 px-4 py-2 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm text-cyan-300 border border-cyan-400/30 bg-white/[0.04] backdrop-blur-xl overflow-hidden transition-all duration-500 hover:scale-105 hover:border-cyan-300/60 hover:shadow-[0_0_35px_rgba(34,211,238,0.35)] hover:-translate-y-0.5 active:scale-95"
-                >
-                    {/* Hover background gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                    {/* Shine sweep */}
-                    <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12" style={{ background: "linear-gradient(90deg, transparent, rgba(34,211,238,0.25), transparent)" }} />
-                    <span className="relative z-10 tracking-wider uppercase" style={{ fontFamily: "var(--font-exo2)" }}>Explore Studio</span>
-                    <ArrowUpRight className="relative z-10 w-3.5 h-3.5 md:w-4 md:h-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </motion.a>
-            </nav>
-
+            {/* ── Content Overlay ── */}
             <motion.div
                 className="relative md:absolute md:inset-0 z-30 w-full order-2 md:order-none pointer-events-none mt-6 md:mt-0"
                 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 style={{ willChange: "transform, opacity" }}>
 
+                {/* Name + Rotating Text */}
                 <div className="md:absolute md:top-[68vh] lg:top-[70vh] left-0 right-0 flex flex-col items-center justify-center text-center w-full px-4 pointer-events-auto mb-16 md:mb-0">
                     <AnimatedName />
                     <div>
@@ -367,15 +310,16 @@ export default function Hero() {
                     </div>
                 </div>
 
+                {/* Bottom CTAs */}
                 <div className="md:absolute md:bottom-[5vh] left-0 right-0 max-w-7xl mx-auto px-6 md:px-16 lg:px-24 flex flex-row items-center justify-between w-full pointer-events-auto mt-2 md:mt-0">
                     <div className="flex justify-start">
                         <MagneticButton strength={30}>
                             <button onClick={() => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" })}
-                                className="group relative overflow-hidden flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-white transition-all duration-500 hover:scale-105 active:scale-95 whitespace-nowrap text-sm md:text-base border border-cyan-400/20"
-                                style={{ background: "linear-gradient(135deg, #06b6d4, #2563eb)", animation: "glow-pulse 3s ease-in-out infinite" }}>
+                                className="group relative overflow-hidden flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold text-black transition-all duration-500 hover:scale-105 active:scale-95 whitespace-nowrap text-sm md:text-base bg-brand-mint hover:bg-white"
+                                style={{ boxShadow: "0 0 30px rgba(152,255,152,0.25)" }}>
                                 <div className="absolute inset-0 -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out skew-x-12" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }} />
                                 <span className="relative z-10 flex items-center gap-2">
-                                    Know More
+                                    Explore My Work
                                     <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" />
                                 </span>
                             </button>
@@ -385,9 +329,9 @@ export default function Hero() {
                     <div className="flex justify-end">
                         <MagneticButton strength={30}>
                             <a href="https://www.linkedin.com/in/mohammed-anas-30110b35b" target="_blank" rel="noopener noreferrer"
-                                className="group relative flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_35px_rgba(34,211,238,0.55)] border border-cyan-500/60 hover:border-cyan-300 active:scale-95 whitespace-nowrap text-sm md:text-base bg-white/5 backdrop-blur-sm">
-                                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-                                <span className="relative z-10 flex items-center gap-2 text-cyan-300 group-hover:text-white transition-colors duration-300">
+                                className="group relative flex items-center gap-2 px-6 py-3 md:px-8 md:py-4 rounded-full font-bold overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-[0_0_30px_rgba(152,255,152,0.3)] border border-brand-mint/30 hover:border-brand-mint active:scale-95 whitespace-nowrap text-sm md:text-base bg-white/5 backdrop-blur-sm">
+                                <div className="absolute inset-0 bg-brand-mint translate-x-[-101%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
+                                <span className="relative z-10 flex items-center gap-2 text-white/80 group-hover:text-black transition-colors duration-300">
                                     LinkedIn <Linkedin className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:scale-110" />
                                 </span>
                             </a>
@@ -396,33 +340,39 @@ export default function Hero() {
                 </div>
             </motion.div>
 
-            {/* Scroll indicator — premium pulsing dot + breathing text */}
-            <motion.div style={{ opacity: scrollOpacity }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-none hidden md:flex flex-col items-center gap-3">
-                <motion.span
-                    className="text-[9px] font-mono tracking-[0.3em] text-cyan-400/40 uppercase"
-                    animate={{ opacity: [0.3, 0.7, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                >Scroll</motion.span>
-                <div className="w-[1px] h-16 relative overflow-hidden bg-white/5">
-                    <motion.div animate={{ y: ['-100%', '200%'] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        className="w-full h-1/2 absolute top-0 left-0" style={{ background: "linear-gradient(to bottom, transparent, #06b6d4, transparent)" }} />
-                </div>
-                <motion.div
-                    className="w-2 h-2 rounded-full bg-cyan-400"
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.4, 0.8, 0.4], boxShadow: ["0 0 0 0 rgba(34,211,238,0)", "0 0 0 8px rgba(34,211,238,0.15)", "0 0 0 0 rgba(34,211,238,0)"] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                />
-            </motion.div>
-
-            <div className="absolute top-24 right-4 md:right-10 z-[40] flex flex-col gap-3 pointer-events-none">
+            {/* ── Stat Counters — refined, bottom-right ── */}
+            <motion.div
+                className="absolute top-28 right-4 md:right-10 z-[40] flex flex-col gap-5 pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 1 }}
+            >
                 {[
-                    { end: 170, suffix: "+", label: "Clients" },
-                    { end: 350, suffix: "+", label: "Designs" },
+                    { end: 50, suffix: "+", label: "Clients" },
+                    { end: 100, suffix: "+", label: "Projects" },
                     { end: 2, suffix: "+", label: "Yrs Exp" }
                 ].map((stat, i) => (
                     <StatCounter key={i} end={stat.end} suffix={stat.suffix} label={stat.label} delayIndex={i} />
                 ))}
-            </div>
+            </motion.div>
+
+            {/* ── Scroll Indicator ── */}
+            <motion.div style={{ opacity: scrollOpacity }} className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-none hidden md:flex flex-col items-center gap-3">
+                <motion.span
+                    className="text-[9px] font-mono tracking-[0.3em] text-white/25 uppercase"
+                    animate={{ opacity: [0.2, 0.5, 0.2] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                >Scroll</motion.span>
+                <div className="w-[1px] h-14 relative overflow-hidden bg-white/5">
+                    <motion.div animate={{ y: ['-100%', '200%'] }} transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                        className="w-full h-1/2 absolute top-0 left-0" style={{ background: "linear-gradient(to bottom, transparent, rgba(152,255,152,0.5), transparent)" }} />
+                </div>
+                <motion.div
+                    className="w-1.5 h-1.5 rounded-full bg-brand-mint"
+                    animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.7, 0.3], boxShadow: ["0 0 0 0 rgba(152,255,152,0)", "0 0 0 6px rgba(152,255,152,0.12)", "0 0 0 0 rgba(152,255,152,0)"] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                />
+            </motion.div>
 
         </section>
     );

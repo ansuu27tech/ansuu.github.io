@@ -6,33 +6,34 @@ import SectionWrapper from "../ui/SectionWrapper";
 
 const experiences = [
   {
-    role: "Founder & Creative Director",
-    company: "Pixelmint Studio",
-    period: "2024 – Present",
-    description:
-      "Founded and scaled Pixelmint Studio — a premium creative digital agency specializing in web design, development, branding, and growth solutions. Leading a team of designers, developers, and strategists to deliver exceptional digital experiences for clients across 25+ countries.",
-    badge: "STUDIO FOUNDER",
-  },
-  {
     role: "Digital Marketing Strategist",
     company: "Draughtman Studio",
-    period: "2026 - Present",
+    period: "2026 – Present",
     description:
-      "Working as a Digital Marketing Strategist at Draughtman Studio, focusing on social media growth, performance marketing, brand positioning, and data-driven campaign strategies. Managing content planning, audience targeting, and analytics to increase engagement, leads, and overall digital presence.",
+      "Leading social media growth, performance marketing, and brand positioning. Managing data-driven campaign strategies, audience targeting, and analytics to maximize engagement and digital presence.",
+    badge: "CURRENT ROLE",
   },
   {
-    role: "Freelance Developer",
-    company: "Self-Employed",
-    period: "2023 - Present",
+    role: "Founder & Creative Director",
+    company: "PixelMint Studio MVS",
+    period: "2024 – Present",
     description:
-      "Specializing in web design, UI development, and creating tailored digital solutions for diverse clients. Delivering high-impact visuals and functional code.",
+      "Founded a premium creative digital agency specializing in web design, development, branding, and growth solutions. Leading a dynamic team to deliver exceptional digital experiences for global clients.",
+    badge: "STUDIO FOUNDER",
   },
   {
     role: "E-Book Author",
     company: "Digital Publication",
     period: "2024",
     description:
-      "Authoring digital content focused on skill-based learning and tech education. Creating resources that simplify complex concepts for aspiring developers.",
+      "Authored comprehensive digital content focused on skill-based learning and tech education, simplifying complex concepts for aspiring developers.",
+  },
+  {
+    role: "Freelance Developer",
+    company: "Self-Employed",
+    period: "2023 – 2024",
+    description:
+      "Specialized in web design, UI development, and tailored digital solutions. Bridged the gap between high-impact visuals and robust functional code for diverse clients.",
   },
 ];
 
@@ -46,35 +47,45 @@ export default function Experience() {
   return (
     <SectionWrapper id="experience" className="bg-transparent relative">
       <div className="container mx-auto px-6" ref={containerRef}>
+        
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="mb-16 text-center"
+          className="mb-20 flex flex-col items-center text-center"
         >
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            Work <span className="text-brand-mint">Experience.</span>
+          <div className="label-section mb-6">
+            <span className="label-number">04</span>
+            <span>/</span>
+            <span>EXPERIENCE</span>
+          </div>
+          
+          <h2 className="heading-editorial text-4xl md:text-5xl lg:text-6xl mb-4">
+            Professional <span className="text-brand-mint">Journey.</span>
           </h2>
-          <p className="text-gray-600">My professional journey so far.</p>
+          <p className="body-lead max-w-2xl text-center">
+            A track record of delivering premium digital experiences and strategic growth.
+          </p>
         </motion.div>
 
-        <div className="relative max-w-3xl mx-auto">
+        <div className="relative max-w-4xl mx-auto">
           {/* Vertical Line — scroll-driven draw */}
           <motion.div
-            className="absolute left-[19px] top-0 bottom-0 w-[1px] md:left-1/2 md:-translate-x-1/2 origin-top"
+            className="absolute left-[27px] top-4 bottom-4 w-[2px] md:left-1/2 md:-translate-x-1/2 origin-top"
             style={{
               scaleY: useTransform(
-                useScroll({ target: containerRef, offset: ["start end", "end start"] }).scrollYProgress,
-                [0, 0.8],
+                useScroll({ target: containerRef, offset: ["start center", "end center"] }).scrollYProgress,
+                [0, 1],
                 [0, 1]
               ),
-              background: "linear-gradient(to bottom, rgba(34,211,238,0.4), rgba(152,255,152,0.3), rgba(34,211,238,0.1))",
-              boxShadow: "0 0 8px rgba(34,211,238,0.15)",
+              background: "linear-gradient(to bottom, rgba(152,255,152,0.6), rgba(152,255,152,0.1))",
+              boxShadow: "0 0 12px rgba(152,255,152,0.2)",
             }}
           />
 
-          <div className="space-y-12">
+          <div className="space-y-8 md:space-y-16">
             {experiences.map((exp, index) => (
               <TimelineItem key={index} data={exp} index={index} />
             ))}
@@ -99,86 +110,72 @@ const TimelineItem = ({ data, index }: { data: (typeof experiences)[0]; index: n
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, delay: index * 0.15, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.7, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
       className={`relative flex flex-col md:flex-row gap-8 ${isEven ? "md:flex-row-reverse" : ""}`}
     >
-      {/* Timeline Dot — pulsing glow */}
-      <div className="absolute left-0 w-10 h-10 flex items-center justify-center md:left-1/2 md:-translate-x-1/2">
-        <motion.div
-          className="w-4 h-4 rounded-full border-4"
-          style={{
-            background: data.badge ? "#a3e635" : "var(--color-brand-mint)",
-            borderColor: "white",
-          }}
-          initial={{ scale: 0 }}
-          whileInView={{ scale: 1 }}
-          viewport={{ once: true, margin: "-30px" }}
-          transition={{ duration: 0.5, delay: index * 0.15, type: "spring", stiffness: 300 }}
-        />
-        {/* Pulsing ring */}
-        <motion.div
-          className="absolute w-4 h-4 rounded-full"
-          style={{ background: data.badge ? "rgba(163,230,53,0.3)" : "rgba(152,255,152,0.3)" }}
-          initial={{ scale: 1, opacity: 0 }}
-          whileInView={{ scale: [1, 2.5], opacity: [0.5, 0] }}
-          viewport={{ once: true, margin: "-30px" }}
-          transition={{ duration: 1.5, delay: index * 0.15 + 0.3, repeat: 0 }}
-        />
+      {/* Timeline Dot — fixed position */}
+      <div className="absolute left-0 w-14 h-14 flex items-center justify-center md:left-1/2 md:-translate-x-1/2 top-0 md:top-1/2 md:-translate-y-1/2">
+        <div className="w-10 h-10 rounded-full bg-[#030305] flex items-center justify-center border border-white/10 z-10">
+            <motion.div
+            className="w-3 h-3 rounded-full"
+            style={{
+                background: "var(--color-brand-mint)",
+                boxShadow: "0 0 10px rgba(152,255,152,0.5)"
+            }}
+            initial={{ scale: 0 }}
+            whileInView={{ scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.5, delay: index * 0.1 + 0.2, type: "spring" }}
+            />
+        </div>
       </div>
 
       {/* Content Card */}
-      <div className="ml-12 md:ml-0 md:w-1/2">
+      <div className="ml-16 md:ml-0 md:w-1/2 pt-1 md:pt-0">
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
-          className={`group relative p-6 glass-panel rounded-xl bg-transparent border overflow-hidden ${isEven ? "md:text-right" : "md:text-left"}`}
+          className={`group relative p-8 glass-panel-premium rounded-2xl ${isEven ? "md:text-right" : "md:text-left"}`}
           style={{
-            borderColor: data.badge ? "rgba(163,230,53,0.15)" : "rgba(255,255,255,0.05)",
-            boxShadow: data.badge ? "0 0 25px rgba(163,230,53,0.08)" : undefined,
+            borderColor: data.badge ? "rgba(152,255,152,0.2)" : "var(--border-default)",
           }}
         >
+          {/* Spotlight hover effect */}
           <motion.div
-            className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100"
+            className="pointer-events-none absolute -inset-px rounded-2xl opacity-0 transition duration-300 group-hover:opacity-100"
             style={{
               background: useTransform(
                 [mouseX, mouseY],
                 ([x, y]) =>
-                  `radial-gradient(600px circle at ${x}px ${y}px, ${data.badge ? "rgba(163,230,53,0.1)" : "rgba(75, 255, 255, 0.1)"}, transparent 40%)`,
+                  `radial-gradient(400px circle at ${x}px ${y}px, rgba(152,255,152,0.06), transparent 40%)`,
               ),
             }}
           />
-          <div className={`relative z-10 flex items-center gap-2 mb-3 flex-wrap ${isEven ? "md:justify-end" : ""}`}>
-            <motion.span
-              className="inline-block px-3 py-1 text-xs font-medium text-brand-mint bg-brand-mint/10 rounded-full"
-              initial={{ opacity: 0, scale: 0.5 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: index * 0.15 + 0.2, type: "spring", stiffness: 400 }}
-            >
-              {data.period}
-            </motion.span>
+          
+          <div className={`relative z-10 flex items-center gap-3 mb-4 flex-wrap ${isEven ? "md:justify-end" : ""}`}>
+            <span className="text-3xl md:text-4xl font-bold text-white/20 group-hover:text-white/40 transition-colors duration-500 font-heading">
+                {data.period.split(" ")[0]}
+            </span>
+            <span className="text-[10px] font-mono tracking-widest uppercase text-brand-mint border border-brand-mint/20 px-2.5 py-1 rounded-md bg-brand-mint/5">
+                {data.period}
+            </span>
             {data.badge && (
-              <motion.span
-                className="inline-block px-3 py-1 text-[10px] font-bold text-lime-400 bg-lime-400/10 border border-lime-400/25 rounded-full tracking-wider"
-                initial={{ opacity: 0, x: -10 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.15 + 0.4 }}
-              >
+              <span className="text-[10px] font-bold text-black bg-brand-mint px-2.5 py-1 rounded-md tracking-wider uppercase">
                 {data.badge}
-              </motion.span>
+              </span>
             )}
           </div>
-          <h3 className="relative z-10 text-xl font-bold text-white mb-1">
+          
+          <h3 className="relative z-10 text-xl md:text-2xl font-bold text-white mb-1 font-heading group-hover:text-brand-mint transition-colors duration-300">
             {data.role}
           </h3>
-          <p className="relative z-10 text-sm text-gray-400 mb-4">
+          <p className="relative z-10 text-sm font-mono text-white/50 mb-5 uppercase tracking-wider">
             {data.company}
           </p>
-          <p className="relative z-10 text-gray-300 leading-relaxed text-sm">
+          <p className="relative z-10 body-refined">
             {data.description}
           </p>
         </div>

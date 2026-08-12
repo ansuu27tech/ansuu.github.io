@@ -48,7 +48,7 @@ export default function StudioSamples() {
                     viewport={{ once: true }}
                     transition={{ delay: 0.2 }}
                 >
-                    A selection of design work crafted at Pixelmint Studio — spanning social media, brand visuals, and advertising.
+                    A selection of design work crafted at PixelMint Studio MVS — spanning social media, brand visuals, and advertising.
                 </motion.p>
             </div>
 
